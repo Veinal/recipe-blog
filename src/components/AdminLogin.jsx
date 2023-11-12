@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -45,7 +46,20 @@ export default function SignInSide() {
   const handleSubmit = async(event) => {
     event.preventDefault();
     
-
+    axios.post('http://localhost:7000/api/adminreg/login',adminState)
+    .then((res)=>{
+      if(res.data.success==true){
+        console.log("login successful");
+        console.log(res.data.admintoken);
+        const auth2 = res.data.admintoken
+        localStorage.setItem("AdminToken",JSON.stringify(auth2))
+        localStorage.setItem("Admin",JSON.stringify(res.data.admin))
+        navigate('/admindashboard')
+      }
+      else{
+        console.log(res.data.error);
+      }
+    })
     await navigate('/admindashboard')
   };
 

@@ -12,6 +12,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { Button } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const drawerWidth = 200;
 
@@ -35,19 +42,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function ClippedDrawer() {
+
+  const [getRequests,setGetRequests]=useState([])
+
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/request/view')
+    .then((res)=>{
+      console.log(res.data);
+      setGetRequests(res.data)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
   return (
     <Box sx={{ display: 'flex' }}>
 
@@ -58,27 +66,36 @@ export default function ClippedDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
 
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1%'}}>
+          <Typography variant="h4" gutterBottom>
+            Request List
+          </Typography>
+          {/* <Button onClick={handleOpen} variant='contained' color='inherit' ><AddIcon/>ADD RECIPE</Button> */}
+        </div>
+
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                <StyledTableCell align="right">Calories</StyledTableCell>
-                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                <StyledTableCell>Sl no.</StyledTableCell>
+                <StyledTableCell>Requests</StyledTableCell>
+                <StyledTableCell>Reviews</StyledTableCell>
+                <StyledTableCell>Date & Time</StyledTableCell>
+                <StyledTableCell>Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {getRequests.map((row,index) => (
                 <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
+                  <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
+                  <StyledTableCell>{row.request}</StyledTableCell>
+                  <StyledTableCell>{row.remarks}</StyledTableCell>
+                  <StyledTableCell>{row.date}</StyledTableCell>
+                  <StyledTableCell style={{display:'flex',gap:'2%'}}>
+                  <Button variant='contained' color='primary'><EditIcon/></Button>
+                    <Button variant='contained' color='success'><VisibilityIcon/></Button>
+                    <Button variant='contained' color='error'><DeleteIcon/></Button>
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                  <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                  <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                  <StyledTableCell align="right">{row.protein}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

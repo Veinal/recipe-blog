@@ -23,6 +23,9 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import {TextField} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const drawerWidth = 200;
@@ -60,19 +63,6 @@ const style = {
   overflowY: 'auto',
   height: '100vh'
 };
-
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 export default function ClippedDrawer() {
   const navigate=useNavigate()
@@ -129,8 +119,11 @@ export default function ClippedDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
 
-        <div style={{display:'flex',justifyContent:'end',marginBottom:'1%'}}>
-          <Button onClick={handleOpen} variant='contained' color='inherit'><AddIcon/>ADD RECIPE</Button>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1%'}}>
+          <Typography variant="h4" gutterBottom>
+            Recipe List
+          </Typography>
+          <Button onClick={handleOpen} variant='contained' color='inherit' ><AddIcon/>ADD RECIPE</Button>
         </div>
 
         <TableContainer component={Paper}>
@@ -140,12 +133,12 @@ export default function ClippedDrawer() {
                 <StyledTableCell>Sl no.</StyledTableCell>
                 <StyledTableCell>Recipe name</StyledTableCell>
                 <StyledTableCell>Image</StyledTableCell>
-                <StyledTableCell>Ingredients</StyledTableCell>
+                {/* <StyledTableCell>Ingredients</StyledTableCell> */}
                 <StyledTableCell>Category</StyledTableCell>
                 <StyledTableCell>Description</StyledTableCell>
-                <StyledTableCell>Instructions</StyledTableCell>
-                <StyledTableCell>Videos</StyledTableCell>
-                <StyledTableCell>Actions</StyledTableCell>
+                {/* <StyledTableCell>Instructions</StyledTableCell> */}
+                {/* <StyledTableCell>Videos</StyledTableCell> */}
+                <StyledTableCell align='center'>Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -153,16 +146,18 @@ export default function ClippedDrawer() {
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                   <StyledTableCell>{row.recipeName}</StyledTableCell>
-                  <StyledTableCell>{row.image}</StyledTableCell>
-                  <StyledTableCell>{row.ingredients}</StyledTableCell>
+                  <StyledTableCell>
+                    <img src={row.image} alt="alt" style={{width:50}} />
+                  </StyledTableCell>
+                  {/* <StyledTableCell>{row.ingredients}</StyledTableCell> */}
                   <StyledTableCell>{row.category}</StyledTableCell>
                   <StyledTableCell>{row.description}</StyledTableCell>
-                  <StyledTableCell>{row.instructions}</StyledTableCell>
-                  <StyledTableCell>{row.video}</StyledTableCell>
-                  <StyledTableCell>
-                    <Button>edit</Button>
-                    <Button>view</Button>
-                    <Button>delete</Button>
+                  {/* <StyledTableCell>{row.instructions}</StyledTableCell> */}
+                  {/* <StyledTableCell>{row.video}</StyledTableCell> */}
+                  <StyledTableCell style={{display:'flex',gap:'2%'}}>
+                    <Button variant='contained' color='primary'><EditIcon/></Button>
+                    <Button variant='contained' color='success'><VisibilityIcon/></Button>
+                    <Button variant='contained' color='error'><DeleteIcon/></Button>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}

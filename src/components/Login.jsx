@@ -46,11 +46,15 @@ export default function SignInSide() {
   const handleSubmit = async(event) => {
     event.preventDefault();
     
-    Axios.post('http://localhost:7000/api/registration/insert',loginState)
+    Axios.post('http://localhost:7000/api/registration/login',loginState)
     .then((res)=>{
       if(res.data.success==true){
         console.log("login successful");
         console.log(res.data);
+        const auth =res.data.authtoken
+        localStorage.setItem("Token",JSON.stringify(auth))
+        localStorage.setItem("User",JSON.stringify(res.data.user))
+        navigate('/')
       }
       else{
         console.log(res.data.error);

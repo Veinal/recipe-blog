@@ -7,17 +7,51 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import { AccountCircle, Email, Lock, PhotoCamera } from '@mui/icons-material';
-import editadmin from '../EDIT ADMIN PROFILE.svg'
+// import editadmin from '../EDIT ADMIN PROFILE.svg'
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function EditAdmin() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your logic for handling form submission here
-  };
+
+  const [editAdmin,setEditAdmin]=useState([])
+  // const [updateAdmin,setUpdateAdmin]=useState([])
+
+  const id='6550652865e3b8e01c782522'
+
+  useEffect(()=>{
+    axios.get(`http://localhost:7000/api/adminreg/singleview/${id}`)
+    .then((res)=>{
+      console.log(res.data);
+      setEditAdmin(res.data)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[id])
+  console.log(editAdmin,'editadmin');
+
+  const handleChange=(e)=>{
+    setEditAdmin({...editAdmin,[e.target.name]:e.target.value})
+  }
+  console.log(editAdmin,'updateAdmin');
 
   const handleFileInputChange = (e) => {
     // Handle file input change logic here
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    axios.put(`http://localhost:7000/api/adminreg/update/${id}`,editAdmin)
+    .then((res)=>{
+      console.log(res.data);
+      setEditAdmin(res.data)
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  };
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -36,6 +70,9 @@ export default function EditAdmin() {
         <form onSubmit={handleSubmit} sx={{ maxWidth: 400, margin: 'auto' }}>
           <TextField
             fullWidth
+            name='adminName'
+            value={editAdmin?.adminName}
+            onChange={(e)=>handleChange(e)}
             label="Admin Name"
             variant="outlined"
             margin="normal"
@@ -50,6 +87,9 @@ export default function EditAdmin() {
 
           <TextField
             fullWidth
+            name='adminEmail'
+            value={editAdmin?.adminEmail}
+            onChange={(e)=>handleChange(e)}
             label="Email"
             variant="outlined"
             margin="normal"
@@ -64,7 +104,10 @@ export default function EditAdmin() {
 
           <TextField
             fullWidth
-            type="password"
+            name='adminPassword'
+            value={editAdmin?.adminPassword}
+            onChange={(e)=>handleChange(e)}
+            // type="password"
             label="Password"
             variant="outlined"
             margin="normal"
@@ -89,8 +132,9 @@ export default function EditAdmin() {
             <TextField
               variant="outlined"
               fullWidth
+              name='profilePic'
+              value={editAdmin?.profilePic}
               disabled
-              value="Selected file name" // Display the selected file name or customize as needed
               sx={{ mr: 1 }}
             />
             <Button

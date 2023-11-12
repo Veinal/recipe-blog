@@ -20,6 +20,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { Link } from 'react-router-dom';
+import logo from '../logo.png'
 
 const drawerWidth = 200;
 
@@ -41,6 +42,13 @@ export default function ClippedDrawer() {
 
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
           <Toolbar>
+            <img
+              src={logo}
+              height="38"
+              alt="MDB Logo"
+              loading="lazy"
+              style={{borderRadius:'50%',marginLeft:'-1%',marginRight:'1%'}}
+            />
             <Typography variant="h6" noWrap component="div">
               ADMIN DASHBOARD
             </Typography>

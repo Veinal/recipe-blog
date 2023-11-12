@@ -16,8 +16,28 @@ import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Axios from 'axios';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const drawerWidth = 200;
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -39,20 +59,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 export default function ClippedDrawer() {
+  const [categories,setCategories]=useState()
   const [getCategories,setGetCategories]=useState([])
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const HandleChange=(e)=>{
+    setCategories({...categories,[e.target.name]:e.target.value})
+  }
 
   useEffect(()=>{
     Axios.get('http://localhost:7000/api/categories/view')
@@ -65,6 +83,20 @@ export default function ClippedDrawer() {
   },[])
   console.log(getCategories,22);
 
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+
+    Axios.post('http://localhost:7000/api/categories/insert',categories)
+    .then((res)=>{
+      console.log(res.data);
+      setCategories(res.data)
+    }).catch((err)=>{
+      console.log(err);
+    })
+
+    handleClose()
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
 
@@ -74,6 +106,13 @@ export default function ClippedDrawer() {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:'1%'}}>
+          <Typography variant="h4" gutterBottom>
+            Category List
+          </Typography>
+          <Button onClick={handleOpen} variant='contained' color='inherit' ><AddIcon/>ADD CATEGORY</Button>
+        </div>
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -95,9 +134,9 @@ export default function ClippedDrawer() {
                     </StyledTableCell>
                   <StyledTableCell>
                     <div style={{display:'flex',gap:'1%'}}>
-                      <Button variant='contained' color='primary'>EDIT</Button>
-                      <Button variant='contained' color='success'>VIEW</Button>
-                      <Button variant='contained' color='error'>DELETE</Button>
+                    <Button variant='contained' color='primary'><EditIcon/></Button>
+                    <Button variant='contained' color='success'><VisibilityIcon/></Button>
+                    <Button variant='contained' color='error'><DeleteIcon/></Button>
                     </div>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -106,6 +145,54 @@ export default function ClippedDrawer() {
           </Table>
         </TableContainer>
         
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <h2 id="modal-modal-title"><b>Enter Category Details</b></h2>
+            
+            {/* Category Name */}
+            <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',alignItems:'center'}}>
+              Category name
+              <TextField
+                name='name'
+                fullWidth
+                label="Category Name"
+                variant="outlined"
+                margin="normal"
+                onChange={(e)=>HandleChange(e)}
+              />
+  
+              {/* Status */}
+              status
+              <Select
+                fullWidth
+                name='status'
+                // label="Status"
+                variant="outlined"
+                margin="normal"
+                onChange={(e)=>HandleChange(e)}
+              >
+                <MenuItem value="available">available</MenuItem>
+                <MenuItem value="notAvailable">not available</MenuItem>
+              </Select>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={handleSubmit}
+              sx={{ mt: 2 }}
+            >
+              Save
+            </Button>
+          </Box>
+        </Modal>
       </Box>
     </Box>
   );

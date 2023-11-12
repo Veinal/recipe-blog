@@ -33,7 +33,7 @@ export default function Footer() {
                 </section>
     
                 <section className="">
-                <form action="">
+                {/* <form action="">
                     <div className="row d-flex justify-content-center">
                     <div className="col-auto">
                         <p className="pt-2">
@@ -54,19 +54,17 @@ export default function Footer() {
                         </button>
                     </div>
                     </div>
-                </form>
+                </form> */}
                 </section>
     
                 <section className="mb-4">
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum
-                    repellat quaerat voluptatibus placeat nam, commodi optio pariatur est quia magnam
-                    eum harum corrupti dicta, aliquam sequi voluptate quas.
+                Welcome to our Food Recipe Blog! We are passionate about sharing delicious recipes and culinary adventures with you.
                 </p>
                 </section>
     
                 <section className="">
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
                     <h5 className="text-uppercase">Links</h5>
     
@@ -142,13 +140,13 @@ export default function Footer() {
                         </li>
                     </ul>
                     </div>
-                </div>
+                </div> */}
                 </section>
             </div>
     
             <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-                © 2020 Copyright:
-                <a className="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+                © 2023 Copyright:
+                <a className="text-white" href="/"> www.recipezz.com</a>
             </div>
             </footer>
         </div>

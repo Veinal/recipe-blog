@@ -43,11 +43,22 @@ export default function SignUp() {
     setSignupState({...signupState,[e.target.name]:e.target.value})
   }
   console.log(signupState,'ss');
+
+  const HandleImage=(e)=>{
+    setSignupState({...signupState,[e.target.name]:e.target.files[0]})
+  }
   
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-    Axios.post('http://localhost:7000/api/registration/insert',signupState)
+    const Data = new FormData();
+    Data.append("userName",signupState.userName)
+    Data.append("email",signupState.email)
+    Data.append("password",signupState.password)
+    Data.append("phone",signupState.phone)
+    Data.append("picture",signupState.picture)
+
+    Axios.post('http://localhost:7000/api/registration/register',Data)
     .then((res)=>{
       console.log(res.data);
     }).catch((err)=>{
@@ -144,7 +155,7 @@ export default function SignUp() {
                       id="picture"
                       type='file'
                       autoComplete="picture"
-                      onChange={(e)=>HandleChange(e)}
+                      onChange={(e)=>HandleImage(e)}
                     />
                   </Grid>
                   
