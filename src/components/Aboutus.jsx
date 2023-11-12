@@ -1,10 +1,19 @@
 import React from 'react';
 import '../Aboutus.css';
 import logo from '../logo.png'
+import backimg1 from '../backimg1.jpg'
+
+const backgroundStyles = {
+  backgroundImage:`url(${backimg1})` , 
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  height: '92vh', 
+};
 
 export default function AboutUs() {
   return (
-    <>
+    <div style={backgroundStyles}>
     <br />
       <div className="about-us">
         <h1>About Us</h1>
@@ -23,6 +32,6 @@ export default function AboutUs() {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }

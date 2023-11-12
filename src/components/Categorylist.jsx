@@ -3,6 +3,7 @@ import * as React from 'react';
 import Drawer from './Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -12,6 +13,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import Axios from 'axios';
 
 const drawerWidth = 200;
 
@@ -48,6 +52,19 @@ const rows = [
 ];
 
 export default function ClippedDrawer() {
+  const [getCategories,setGetCategories]=useState([])
+
+  useEffect(()=>{
+    Axios.get('http://localhost:7000/api/categories/view')
+    .then((res)=>{
+      console.log('res',res.data);
+      setGetCategories(res.data)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+  console.log(getCategories,22);
+
   return (
     <Box sx={{ display: 'flex' }}>
 
@@ -62,23 +79,27 @@ export default function ClippedDrawer() {
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                <StyledTableCell align="right">Calories</StyledTableCell>
-                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                <StyledTableCell>sl no.</StyledTableCell>
+                <StyledTableCell>Category name</StyledTableCell>
+                <StyledTableCell>Status</StyledTableCell>
+                <StyledTableCell>Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {getCategories.map((row,index) => (
                 <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {row.name}
+                  <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
+                  <StyledTableCell>{row.name}</StyledTableCell>
+                  <StyledTableCell>
+                    {(row.status)===0? 'not available': 'available  '}
+                    </StyledTableCell>
+                  <StyledTableCell>
+                    <div style={{display:'flex',gap:'1%'}}>
+                      <Button variant='contained' color='primary'>EDIT</Button>
+                      <Button variant='contained' color='success'>VIEW</Button>
+                      <Button variant='contained' color='error'>DELETE</Button>
+                    </div>
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                  <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                  <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                  <StyledTableCell align="right">{row.protein}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

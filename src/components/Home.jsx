@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Box from '@mui/material/Box';
@@ -11,7 +11,25 @@ import image1 from '../image1.jpg'
 import image2 from '../image2.jpg'
 import image3 from '../image3.jpg'
 import image4 from '../image4.jpg'
+import recipesvg from '../recipeSvg.svg'
+import '../button.css'
 
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import CardMedia from '@mui/material/CardMedia';
+import Axios from 'axios';
+
+
+function shuffleArray(array) {
+  let shuffledArray = array.slice();
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+}
 
 export default function Home() {
 
@@ -39,6 +57,26 @@ export default function Home() {
         };
       }, []);
 
+
+      const [getRecipes,setGetRecipes]=useState([])
+
+      useEffect(()=>{
+        Axios.get('http://localhost:7000/api/recipes/view')
+        .then((res)=>{
+          console.log(res.data,'res');
+          setGetRecipes(res.data)
+        })
+        .catch((err)=>{
+          alert(err)
+        })
+      },[])
+
+      // Shuffle the array of recipes
+      const shuffledRecipes = shuffleArray(getRecipes);
+
+      // Display only the first three recipes
+      const displayedRecipes = shuffledRecipes.slice(0, 3);
+
   return (
     <div>
       {/* <Navbar/> */}
@@ -46,6 +84,10 @@ export default function Home() {
       <Link to='/admindashboard'><Button variant='contained'>admin dashboard</Button></Link>      
       <Link to='/drawer'><Button variant='contained'>drawer</Button></Link>      
       <Link to='/categorylist'><Button variant='contained'>Category</Button></Link>      
+      <Link to='/signup'><Button variant='contained'>signup</Button></Link>      
+      <Link to='/login'><Button variant='contained'>login</Button></Link>      
+      <Link to='/adminlogin'><Button variant='contained'>admin login</Button></Link>      
+      <Link to='/viewrecipe'><Button variant='contained'>view recipe</Button></Link>      
 
       <div id="carouselExampleIndicators" className="carousel slide" data-mdb-ride="carousel" >
         <div className="carousel-indicators">
@@ -143,9 +185,73 @@ export default function Home() {
         </Box>
       </div> <br /><br />
 
-      <hr /> <br /><br />
+      <hr /> 
 
       {/* Recipes: */}
+
+      <div>
+
+        <div style={{display:'flex',justifyContent:'center'}}><img src={recipesvg} alt="" /></div>
+        <br />
+        <div style={{display:'flex',justifyContent:'end'}}>
+          <Link to='/recipes'><button class="shadow__btn">More Recipes</button></Link>
+        </div>
+       
+
+        {/* <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
+        {getRecipes?.map((rec)=>{
+          return(
+            <>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  component="img"
+                  alt="green iguana"
+                  height="140"
+                  image={rec.image}
+                />
+                <CardContent>
+                  <Typography style={{display:'flex',flexDirection:'column'}}>
+                    <h6><b>Recipe name: </b>{rec.recipeName} </h6>
+                    <h6><b>Description: </b>{rec.description}</h6>
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small">Share</Button>
+                  <Button size="small">Learn More</Button>
+                </CardActions>
+              </Card>
+            </>
+          )
+        })}
+      </div> */}
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
+        {displayedRecipes.map((rec) => (
+          <React.Fragment key={rec.id}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia component="img" alt="green iguana" height="140" image={rec.image} />
+              <CardContent>
+                <Typography style={{ display: 'flex', flexDirection: 'column' }}>
+                  <h6>
+                    <b>Recipe name: </b>
+                    {rec.recipeName}{' '}
+                  </h6>
+                  <h6>
+                    <b>Description: </b>
+                    {rec.description}
+                  </h6>
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Share</Button>
+                <Button size="small">Learn More</Button>
+              </CardActions>
+            </Card>
+          </React.Fragment>
+        ))}
+      </div>
+
+      </div> <br /><br />
 
       <Footer/>
 
