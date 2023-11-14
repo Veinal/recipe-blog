@@ -22,7 +22,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import {TextField} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -64,10 +64,23 @@ const style = {
   height: '100vh'
 };
 
+const style2 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+};
+
 export default function ClippedDrawer() {
   const navigate=useNavigate()
 
   const [form,setForm]=useState()
+  const [count,setCount]=useState(0)
 
   const Input=(e)=>{
     setForm({...form,[e.target.name]:e.target.value})
@@ -85,13 +98,46 @@ export default function ClippedDrawer() {
     .catch((err)=>{
       alert(err)
     })
-  },[])
+  },[count])
   console.log(getRecipes,1);
 
+  const [selected,setSelected]=useState('')
+
+  //input recipe form 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  //view form
+  const [open2, setOpen2] = React.useState(false);
+  const handleOpenView = (i) => {
+    setOpen2(true);
+    setSelected(i)
+  }
+
+  const handleCloseView = () => setOpen2(false);
+
+  //delete form
+  const [open3, setOpen3] = React.useState(false);
+  const handleOpenDel = (i) => {
+    setOpen3(true);
+    setSelected(i)
+  }
+
+  const handleCloseDel = () => setOpen3(false);
+
+  const Del=async(item)=>{
+    Axios.delete(`http://localhost:7000/api/recipes/delete/${selected._id}`)
+    .then((res)=>{
+      console.log('res',res.data);
+      setCount((prev)=>!prev);
+      // await handleClose2
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+    await handleCloseDel()
+  }
 
   const handleSubmit=async(e)=>{
     e.preventDefault()
@@ -99,7 +145,7 @@ export default function ClippedDrawer() {
     Axios.post('http://localhost:7000/api/recipes/insert',form)
     .then((result)=>{
       console.log(result.data);
-      
+      // setCount((prev)=>!prev);
     })
     .catch((err)=>{
       console.log(err);
@@ -155,9 +201,9 @@ export default function ClippedDrawer() {
                   {/* <StyledTableCell>{row.instructions}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.video}</StyledTableCell> */}
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
-                    <Button variant='contained' color='primary'><EditIcon/></Button>
-                    <Button variant='contained' color='success'><VisibilityIcon/></Button>
-                    <Button variant='contained' color='error'><DeleteIcon/></Button>
+                    <Link to={`/editrecipelist/${row?._id}`}><Button variant='contained' color='primary'><EditIcon/></Button></Link>
+                    <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
+                    <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -195,7 +241,63 @@ export default function ClippedDrawer() {
               
             </Box>
           </Modal>
+
+          {/* delete modal card */}
+          <Modal
+            open={open3}
+            onClose={handleCloseDel}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+            <Card>
+              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
+                
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  do you want to delete {selected.recipeName} ?
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  
+                  <Button onClick={()=>Del(selected)} variant='contained' color='error' >Delete</Button>
+                  <Button onClick={handleCloseDel} variant='contained' color='inherit'>Close</Button>
+                </Typography>
+              </CardContent>
+              
+            </Card>
+            </Box>
+          </Modal>
+
+          {/* view modal card */}
+          <Modal
+            open={open2}
+            onClose={handleCloseView}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+            <Card>
+              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
+                
+              <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                View Recipe
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <img src={selected.image} alt="no image found" style={{width:100}} />
+                <h2><label><b><u>Product:</u></b></label>{selected.recipeName}</h2>
+                <h2><label><b><u>Quantity:</u></b></label>{selected.ingredients}</h2>
+                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
+                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
+                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+              </Typography>
+              </CardContent>
+              
+            </Card>
+            </Box>
+          </Modal>
         </div>
+
       </Box>
     </Box>
   );

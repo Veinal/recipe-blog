@@ -13,12 +13,16 @@ import backimg1 from '../backimg1.jpg'
 import black from '../black.jpg'
 import { useState,useEffect } from 'react';
 import Axios from 'axios';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function ImgMediaCard() {
 
   const [getRecipes,setGetRecipes]=useState([])
+  const [requestState,setRequestState]=useState()
+  const navigate=useNavigate()
 
   useEffect(()=>{
     Axios.get('http://localhost:7000/api/recipes/view')
@@ -30,6 +34,25 @@ export default function ImgMediaCard() {
       alert(err)
     })
   },[])
+
+  const handleChange=(e)=>{
+    setRequestState({...requestState,[e.target.name]:e.target.value})
+  }
+  console.log(requestState,'req')
+
+  const handleReqSubmit=(e)=>{
+    e.preventDefault();
+
+    axios.post('http://localhost:7000/api/request/insert',requestState)
+    .then((res)=>{
+      console.log(res.data)
+      // setRequestState(res.data)
+      window.location.reload();
+    }).catch((err)=>{
+      console.log(err)
+    })
+    navigate('/recipes')
+  }
 
   return (
     <div style={{backgroundImage:`url(${black})`,backgroundSize:'cover',backgroundPosition:'center'}}>
@@ -106,15 +129,17 @@ export default function ImgMediaCard() {
         <CardContent>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: '5%' }}>
             <Typography>
-              Request: <TextField size='small' label='Recipe Name' variant='outlined' />
+              Request: <TextField name='request' onChange={(e)=>handleChange(e)} size='small' label='Recipe Name' variant='outlined' />
             </Typography>
             <Typography>
-              Remarks: <TextField size='small' label='Remarks' variant='outlined' />
+              Remarks: <TextField name='remarks' onChange={(e)=>handleChange(e)} size='small' label='Remarks' variant='outlined' />
             </Typography>
           </div>
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-          <Button variant='contained' style={{ backgroundColor: '#4CAF50', color: 'white' }}>Submit</Button>
+          <Button onClick={handleReqSubmit} variant='contained' style={{ backgroundColor: '#4CAF50', color: 'white' }}>
+            Submit
+          </Button>
         </CardActions>
       </Card>
     </div>

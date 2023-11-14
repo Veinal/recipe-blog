@@ -17,17 +17,19 @@ export default function EditAdmin() {
   const [editAdmin,setEditAdmin]=useState([])
   // const [updateAdmin,setUpdateAdmin]=useState([])
 
-  const id='6550652865e3b8e01c782522'
+  const id='6551ab2e5851b4143f7e107e'
 
   useEffect(()=>{
-    axios.get(`http://localhost:7000/api/adminreg/singleview/${id}`)
+    const localAdmin=JSON.parse(localStorage.getItem("Admin"))
+
+    axios.get(`http://localhost:7000/api/adminreg/singleview/${localAdmin._id}`)
     .then((res)=>{
       console.log(res.data);
       setEditAdmin(res.data)
     }).catch((err)=>{
       alert(err)
     })
-  },[id])
+  },[])
   console.log(editAdmin,'editadmin');
 
   const handleChange=(e)=>{
@@ -102,7 +104,7 @@ export default function EditAdmin() {
             }}
           />
 
-          <TextField
+          {/* <TextField
             fullWidth
             name='adminPassword'
             value={editAdmin?.adminPassword}
@@ -118,7 +120,7 @@ export default function EditAdmin() {
                 </InputAdornment>
               ),
             }}
-          />
+          /> */}
 
           {/* File Input for Profile Picture */}
           <input

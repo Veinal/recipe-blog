@@ -139,8 +139,8 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
+                  <Link to='/adminlogin' variant="body2">
+                    <span style={{color:'green'}}><u><b>Are you an Admin?</b></u></span>
                   </Link>
                 </Grid>
                 <Grid item>

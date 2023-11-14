@@ -60,7 +60,7 @@ export default function SignInSide() {
         console.log(res.data.error);
       }
     })
-    await navigate('/admindashboard')
+    // await navigate('/admindashboard')
   };
 
   return (
@@ -120,10 +120,10 @@ export default function SignInSide() {
                 autoComplete="current-password"
                 onChange={(e)=>handleChange(e)}
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth
@@ -135,9 +135,9 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  {/* <Link href="#" variant="body2">
                     Forgot password?
-                  </Link>
+                  </Link> */}
                 </Grid>
                 {/* <Grid item>
                   <Link href="#" variant="body2">

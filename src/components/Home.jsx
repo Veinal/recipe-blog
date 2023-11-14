@@ -88,6 +88,8 @@ export default function Home() {
       <Link to='/login'><Button variant='contained'>login</Button></Link>      
       <Link to='/adminlogin'><Button variant='contained'>admin login</Button></Link>      
       <Link to='/viewrecipe'><Button variant='contained'>view recipe</Button></Link>      
+      <Link to='/editrecipelist'><Button variant='contained'>edit recipe</Button></Link>      
+      <Link to='/editcateglist'><Button variant='contained'>edit cat</Button></Link>      
 
       <div id="carouselExampleIndicators" className="carousel slide" data-mdb-ride="carousel" >
         <div className="carousel-indicators">

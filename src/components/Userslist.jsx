@@ -19,6 +19,10 @@ import { Button } from '@mui/material';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Modal from '@mui/material/Modal';
 
 
 const drawerWidth = 200;
@@ -43,10 +47,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const style2 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+};
 
 export default function ClippedDrawer() {
 
   const [getUsers,setGetUsers]=useState([])
+  const [count,setCount]=useState(0)
+
 
   useEffect(()=>{
     axios.get('http://localhost:7000/api/registration/view')
@@ -56,8 +73,42 @@ export default function ClippedDrawer() {
     }).catch((err)=>{
       alert(err);
     })
-  },[])
+  },[count])
   console.log(getUsers,'getusers');
+
+  const [selected,setSelected]=useState('')
+
+  //view form
+  const [open2, setOpen2] = React.useState(false);
+  const handleOpenView = (i) => {
+    setOpen2(true);
+    setSelected(i)
+  }
+
+  const handleCloseView = () => setOpen2(false);
+
+  //delete form
+  const [open3, setOpen3] = React.useState(false);
+  const handleOpenDel = (i) => {
+    setOpen3(true);
+    setSelected(i)
+  }
+
+  const handleCloseDel = () => setOpen3(false);
+
+  const Del=async(item)=>{
+    axios.delete(`http://localhost:7000/api/registration/delete/${selected._id}`)
+    .then((res)=>{
+      console.log('res',res.data);
+      setCount((prev)=>!prev);
+      // await handleClose2
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+    await handleCloseDel()
+  }
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -97,9 +148,9 @@ export default function ClippedDrawer() {
                   <StyledTableCell >{row.phone}</StyledTableCell>
                   <StyledTableCell >{row.picture}</StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
-                    <Button variant='contained' color='primary'><EditIcon/></Button>
-                    <Button variant='contained' color='success'><VisibilityIcon/></Button>
-                    <Button variant='contained' color='error'><DeleteIcon/></Button>
+                    {/* <Button variant='contained' color='primary'><EditIcon/></Button> */}
+                    <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
+                    <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -107,6 +158,62 @@ export default function ClippedDrawer() {
           </Table>
         </TableContainer>
         
+        <div>
+          {/* delete modal card */}
+          <Modal
+            open={open3}
+            onClose={handleCloseDel}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+            <Card>
+              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
+                
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  do you want to delete {selected.userName} ?
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  
+                  <Button onClick={()=>Del(selected)} variant='contained' color='error' >Delete</Button>
+                  <Button onClick={handleCloseDel} variant='contained' color='inherit'>Close</Button>
+                </Typography>
+              </CardContent>
+              
+            </Card>
+            </Box>
+          </Modal>
+
+          {/* view modal card */}
+          <Modal
+            open={open2}
+            onClose={handleCloseView}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+            <Card>
+              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
+                
+              <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                View User
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <img src={selected.image} alt="no image found" style={{width:100}} />
+                <h2><label><b><u>Product:</u></b></label>{selected.userName}</h2>
+                <h2><label><b><u>Quantity:</u></b></label>{selected.email}</h2>
+                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
+                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
+                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+              </Typography>
+              </CardContent>
+              
+            </Card>
+            </Box>
+          </Modal>
+        </div>
       </Box>
     </Box>
   );

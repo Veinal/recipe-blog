@@ -24,6 +24,10 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 200;
 
@@ -32,7 +36,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 420,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -59,10 +63,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const style2 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+};
+
 
 export default function ClippedDrawer() {
   const [categories,setCategories]=useState()
   const [getCategories,setGetCategories]=useState([])
+  const [count,setCount]=useState(0)
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -71,7 +88,7 @@ export default function ClippedDrawer() {
   const HandleChange=(e)=>{
     setCategories({...categories,[e.target.name]:e.target.value})
   }
-
+  console.log(categories)
   useEffect(()=>{
     Axios.get('http://localhost:7000/api/categories/view')
     .then((res)=>{
@@ -80,8 +97,41 @@ export default function ClippedDrawer() {
     }).catch((err)=>{
       alert(err)
     })
-  },[])
+  },[count])
   console.log(getCategories,22);
+
+  const [selected,setSelected]=useState('')
+
+  //view form
+  const [open2, setOpen2] = React.useState(false);
+  const handleOpenView = (i) => {
+    setOpen2(true);
+    setSelected(i)
+  }
+
+  const handleCloseView = () => setOpen2(false);
+
+  //delete form
+  const [open3, setOpen3] = React.useState(false);
+  const handleOpenDel = (i) => {
+    setOpen3(true);
+    setSelected(i)
+  }
+
+  const handleCloseDel = () => setOpen3(false);
+
+  const Del=async(item)=>{
+    Axios.delete(`http://localhost:7000/api/categories/delete/${selected._id}`)
+    .then((res)=>{
+      console.log('res',res.data);
+      setCount((prev)=>!prev);
+      // await handleClose2
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+    await handleCloseDel()
+  }
 
   const handleSubmit=(e)=>{
     e.preventDefault()
@@ -89,7 +139,7 @@ export default function ClippedDrawer() {
     Axios.post('http://localhost:7000/api/categories/insert',categories)
     .then((res)=>{
       console.log(res.data);
-      setCategories(res.data)
+      // setCategories(res.data)
     }).catch((err)=>{
       console.log(err);
     })
@@ -129,14 +179,12 @@ export default function ClippedDrawer() {
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                   <StyledTableCell>{row.name}</StyledTableCell>
-                  <StyledTableCell>
-                    {(row.status)===0? 'not available': 'available  '}
-                    </StyledTableCell>
+                  <StyledTableCell>{row.status}</StyledTableCell>
                   <StyledTableCell>
                     <div style={{display:'flex',gap:'1%'}}>
-                    <Button variant='contained' color='primary'><EditIcon/></Button>
-                    <Button variant='contained' color='success'><VisibilityIcon/></Button>
-                    <Button variant='contained' color='error'><DeleteIcon/></Button>
+                    <Link to={`/editcateglist/${row?._id}`}><Button variant='contained' color='primary'><EditIcon/></Button></Link>
+                    <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
+                    <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
                     </div>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -168,6 +216,16 @@ export default function ClippedDrawer() {
   
               {/* Status */}
               status
+              {/* <TextField
+                name='name'
+                disabled
+                fullWidth
+                // label="Category Name"
+                value="available"
+                variant="outlined"
+                margin="normal"
+                onChange={(e)=>HandleChange(e)}
+              /> */}
               <Select
                 fullWidth
                 name='status'
@@ -177,7 +235,7 @@ export default function ClippedDrawer() {
                 onChange={(e)=>HandleChange(e)}
               >
                 <MenuItem value="available">available</MenuItem>
-                <MenuItem value="notAvailable">not available</MenuItem>
+                <MenuItem value="not available">not available</MenuItem>
               </Select>
             </div>
 
@@ -193,6 +251,63 @@ export default function ClippedDrawer() {
             </Button>
           </Box>
         </Modal>
+
+        <div>
+          {/* delete modal card */}
+          <Modal
+            open={open3}
+            onClose={handleCloseDel}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+            <Card>
+              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
+                
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  do you want to delete {selected.name} ?
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  
+                  <Button onClick={()=>Del(selected)} variant='contained' color='error' >Delete</Button>
+                  <Button onClick={handleCloseDel} variant='contained' color='inherit'>Close</Button>
+                </Typography>
+              </CardContent>
+              
+            </Card>
+            </Box>
+          </Modal>
+
+          {/* view modal card */}
+          <Modal
+            open={open2}
+            onClose={handleCloseView}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style2}>
+            <Card>
+              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
+                
+              <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                View Recipe
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <img src={selected.image} alt="no image found" style={{width:100}} />
+                <h2><label><b><u>Product:</u></b></label>{selected.recipeName}</h2>
+                <h2><label><b><u>Quantity:</u></b></label>{selected.ingredients}</h2>
+                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
+                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
+                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+              </Typography>
+              </CardContent>
+              
+            </Card>
+            </Box>
+          </Modal>
+        </div>
       </Box>
     </Box>
   );
