@@ -26,6 +26,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 const drawerWidth = 200;
@@ -76,15 +80,41 @@ const style2 = {
   p: 2,
 };
 
+const style3 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '80%',
+  maxHeight: '95vh', // Set a maximum height to allow scrolling
+  overflowY: 'auto', // Enable vertical scrolling if the content exceeds the height
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+};
+
 export default function ClippedDrawer() {
   const navigate=useNavigate()
 
   const [form,setForm]=useState()
   const [count,setCount]=useState(0)
 
+  const [getCategory,setGetCategory]=useState([]) //for useeffect
+  const [categState,setCategState]=useState()  //for onchange
+
   const Input=(e)=>{
     setForm({...form,[e.target.name]:e.target.value})
     console.log(form)
+  }
+
+  const InputImage=(e)=>{
+    setForm({...form,[e.target.name]:e.target.files[0]})
+    console.log(form)
+  }
+
+  const handleCategory=(e)=>{
+    setCategState(e.target.value)
   }
 
   const [getRecipes,setGetRecipes]=useState([])
@@ -100,6 +130,17 @@ export default function ClippedDrawer() {
     })
   },[count])
   console.log(getRecipes,1);
+
+  useEffect(()=>{
+    Axios.get('http://localhost:7000/api/categories/view')
+    .then((res)=>{
+      console.log(res.data)
+      setGetCategory(res.data)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+console.log(getCategory,'ca')
 
   const [selected,setSelected]=useState('')
 
@@ -142,10 +183,20 @@ export default function ClippedDrawer() {
   const handleSubmit=async(e)=>{
     e.preventDefault()
 
-    Axios.post('http://localhost:7000/api/recipes/insert',form)
+    const Data=new FormData();
+    Data.append("recipeName",form.recipeName)
+    Data.append("image",form.image)
+    Data.append("ingredients",form.ingredients)
+    Data.append("category",categState)
+    Data.append("description",form.description)
+    Data.append("instructions",form.instructions)
+    Data.append("video",form.video)
+
+    console.log(Data)
+    Axios.post('http://localhost:7000/api/recipes/insert',Data)
     .then((result)=>{
       console.log(result.data);
-      // setCount((prev)=>!prev);
+      setCount((prev)=>!prev);
     })
     .catch((err)=>{
       console.log(err);
@@ -181,10 +232,10 @@ export default function ClippedDrawer() {
                 <StyledTableCell>Image</StyledTableCell>
                 {/* <StyledTableCell>Ingredients</StyledTableCell> */}
                 <StyledTableCell>Category</StyledTableCell>
-                <StyledTableCell>Description</StyledTableCell>
+                {/* <StyledTableCell>Description</StyledTableCell> */}
                 {/* <StyledTableCell>Instructions</StyledTableCell> */}
                 {/* <StyledTableCell>Videos</StyledTableCell> */}
-                <StyledTableCell align='center'>Actions</StyledTableCell>
+                <StyledTableCell >Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -193,11 +244,11 @@ export default function ClippedDrawer() {
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                   <StyledTableCell>{row.recipeName}</StyledTableCell>
                   <StyledTableCell>
-                    <img src={row.image} alt="alt" style={{width:50}} />
+                    <img src={`http://localhost:7000/uploads/recipe/${row?.image}`} alt="alt" style={{width:50,height:50,borderRadius:'15%'}} />
                   </StyledTableCell>
                   {/* <StyledTableCell>{row.ingredients}</StyledTableCell> */}
-                  <StyledTableCell>{row.category}</StyledTableCell>
-                  <StyledTableCell>{row.description}</StyledTableCell>
+                  <StyledTableCell>{row.category_id?.name}</StyledTableCell>
+                  {/* <StyledTableCell>{row.description}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.instructions}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.video}</StyledTableCell> */}
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
@@ -212,6 +263,7 @@ export default function ClippedDrawer() {
         </TableContainer>
         
         <div>
+          {/* enter recipe details */}
           <Modal
             open={open}
             onClose={handleClose}
@@ -225,9 +277,27 @@ export default function ClippedDrawer() {
                   <h2 style={{marginLeft:'20%'}}><b>ENTER RECIPE DETAILS:</b></h2> 
                   <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1%'}}>
                     <label>Recipe name:</label><TextField onChange={(e)=>Input(e)} name='recipeName' id="outlined-basic" label="recipe name" variant="outlined" />
-                    <label>Image:</label><TextField onChange={(e)=>Input(e)} type='file' name='image' id="outlined-basic" label="image" variant="outlined" />
+                    <label>Image:</label><TextField onChange={(e)=>InputImage(e)} type='file' name='image' id="outlined-basic" label="image" variant="outlined" />
                     <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline/>
-                    <label>Category:</label><TextField onChange={(e)=>Input(e)} name='category' id="outlined-basic" label="category" variant="outlined" />
+                    {/* <label>Category:</label><TextField onChange={(e)=>Input(e)} name='category' id="outlined-basic" label="category" variant="outlined" /> */}
+                    <label>Category:</label>
+                    <Box sx={{ minWidth: 120 }}>
+                      <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">Category:</InputLabel>
+                          <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          // value={age}
+                          name="category"
+                          label="Category"
+                          onChange={(e)=>handleCategory(e)}
+                          >
+                          {getCategory?.map((item)=>{
+                              return(<MenuItem value={item._id}>{item.name}</MenuItem>)
+                          })}                       
+                          </Select>
+                      </FormControl>
+                    </Box>
                     <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline/>
                     <label>Instructions:</label><TextField onChange={(e)=>Input(e)} name='instructions' id="outlined-basic" label="instructions" variant="outlined" multiline />
                     <label>Video:</label><TextField onChange={(e)=>Input(e)} name='video' id="outlined-basic" label="video" variant="outlined" />
@@ -275,20 +345,23 @@ export default function ClippedDrawer() {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={style2}>
+            <Box sx={style3}>
             <Card>
-              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
-                
               <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                View Recipe
+              <Typography style={{display:'flex',justifyContent:'center'}} gutterBottom variant="h4" component="div">
+                <b><u>VIEW RECIPE</u></b>
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <img src={selected.image} alt="no image found" style={{width:100}} />
-                <h2><label><b><u>Product:</u></b></label>{selected.recipeName}</h2>
-                <h2><label><b><u>Quantity:</u></b></label>{selected.ingredients}</h2>
-                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
-                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
+                <span style={{display:'flex',justifyContent:'center'}}>
+                  <img src={`http://localhost:7000/uploads/recipe/${selected?.image}`} alt="no image found" style={{width:'400px',height:'300px',objectFit:'cover',border:'2px solid black',padding:'1%'}} />
+                </span>
+                <hr />
+                <h4><label><b>recipe name:</b></label> {selected.recipeName}</h4>
+                <h4><label><b>description:</b></label> {selected.ingredients}</h4>
+                <h4><label><b>category:</b></label> {selected.category_id?.name}</h4>
+                <h4><label><b>ingredients:</b></label> {selected.category}</h4>
+                <h4><label><b>instructions:</b></label> {selected.description}</h4>
+                <h4><label><b>video:</b></label> {selected.video}</h4>
                 <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
               </Typography>
               </CardContent>

@@ -48,7 +48,7 @@ export default function Router() {
 
                 <Route exact path='/recipes' element={<WithNavbar><Recipes/></WithNavbar>} />
                 <Route exact path='/aboutus' element={<WithNavbar><Aboutus/></WithNavbar>} />
-                <Route exact path='/viewrecipe' element={<WithNavbar><ViewRecipe/></WithNavbar>}/>
+                <Route exact path='/viewrecipe/:id' element={<WithNavbar><ViewRecipe/></WithNavbar>}/>
             </Routes>
         </BrowserRouter>
     </div>

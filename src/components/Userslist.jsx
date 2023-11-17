@@ -56,7 +56,19 @@ const style2 = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 2,
+  // p: 2,
+};
+
+const style3 = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '45%',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  // p: 2,
 };
 
 export default function ClippedDrawer() {
@@ -146,7 +158,9 @@ export default function ClippedDrawer() {
                   <StyledTableCell >{row.userName}</StyledTableCell>
                   <StyledTableCell >{row.email}</StyledTableCell>
                   <StyledTableCell >{row.phone}</StyledTableCell>
-                  <StyledTableCell >{row.picture}</StyledTableCell>
+                  <StyledTableCell >
+                    <img src={`http://localhost:7000/uploads/users/${row?.picture}`} alt="" style={{width:50,height:50,borderRadius:'15%'}}/>
+                  </StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
                     {/* <Button variant='contained' color='primary'><EditIcon/></Button> */}
                     <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
@@ -192,21 +206,19 @@ export default function ClippedDrawer() {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box sx={style2}>
+            <Box sx={style3}>
             <Card>
-              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
-                
               <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                View User
+              <Typography gutterBottom variant="h4" component="div">
+                <b><u>VIEW USER DETAILS:</u></b>
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <img src={selected.image} alt="no image found" style={{width:100}} />
-                <h2><label><b><u>Product:</u></b></label>{selected.userName}</h2>
-                <h2><label><b><u>Quantity:</u></b></label>{selected.email}</h2>
-                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
-                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
-                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+                <span style={{display:'flex',justifyContent:'center'}}><img src={`http://localhost:7000/uploads/users/${selected?.picture}`} alt="no image found" style={{width:100}} /></span>
+                <hr />
+                <h3><label><b><u>User name:</u></b></label>{selected.userName}</h3>
+                <h3><label><b><u>Email:</u></b></label>{selected.email}</h3>
+                <h3><label><b><u>Phone:</u></b></label>{selected.phone}</h3>
+                <span style={{display:'flex',justifyContent:'center'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></span>
               </Typography>
               </CardContent>
               

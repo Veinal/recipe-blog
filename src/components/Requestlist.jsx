@@ -55,7 +55,7 @@ const style2 = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 2,
+  // p: 2,
 };
 
 export default function ClippedDrawer() {
@@ -142,7 +142,7 @@ export default function ClippedDrawer() {
                   <StyledTableCell>{row.remarks}</StyledTableCell>
                   <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
-                    <Button variant='contained' color='primary'><EditIcon/></Button>
+                    {/* <Button variant='contained' color='primary'><EditIcon/></Button> */}
                     <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
                     <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
                   </StyledTableCell>
@@ -188,19 +188,15 @@ export default function ClippedDrawer() {
           >
             <Box sx={style2}>
             <Card>
-              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
-                
               <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                View Recipe
+              <Typography gutterBottom variant="h4" component="div">
+                <b><u>VIEW REQUEST:</u></b>
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <img src={selected.image} alt="no image found" style={{width:100}} />
-                <h2><label><b><u>Product:</u></b></label>{selected.recipeName}</h2>
-                <h2><label><b><u>Quantity:</u></b></label>{selected.ingredients}</h2>
-                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
-                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
-                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+                <br />
+                <h4><label><b><u>Request:</u></b></label>{selected.request}</h4>
+                <h4><label><b><u>Remarks:</u></b></label>{selected.remarks}</h4>
+                <span style={{display:'flex',justifyContent:'center'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></span>
               </Typography>
               </CardContent>
               

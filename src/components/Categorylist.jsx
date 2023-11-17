@@ -72,7 +72,7 @@ const style2 = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 2,
+  // p: 2,
 };
 
 
@@ -139,7 +139,7 @@ export default function ClippedDrawer() {
     Axios.post('http://localhost:7000/api/categories/insert',categories)
     .then((res)=>{
       console.log(res.data);
-      // setCategories(res.data)
+      setCount((prev)=>!prev)
     }).catch((err)=>{
       console.log(err);
     })
@@ -288,19 +288,16 @@ export default function ClippedDrawer() {
           >
             <Box sx={style2}>
             <Card>
-              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
-                
               <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                View Recipe
+              <Typography gutterBottom variant="h4" component="div">
+                <b><u>VIEW CATEGORY</u></b>
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                <img src={selected.image} alt="no image found" style={{width:100}} />
-                <h2><label><b><u>Product:</u></b></label>{selected.recipeName}</h2>
-                <h2><label><b><u>Quantity:</u></b></label>{selected.ingredients}</h2>
-                <h2><label><b><u>Price:</u></b></label>{selected.category}</h2>
-                <h2><label><b><u>Description:</u></b></label>{selected.description}</h2>
-                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+                {/* <img src={selected.image} alt="no image found" style={{width:100}} /> */}
+                <br />
+                <h4><label><b>Category name:</b></label>{selected.name}</h4>
+                <h4><label><b>Status:</b></label>{selected.status}</h4>
+                <span style={{display:'flex',justifyContent:'center'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></span>
               </Typography>
               </CardContent>
               

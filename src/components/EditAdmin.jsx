@@ -15,6 +15,7 @@ import axios from 'axios';
 export default function EditAdmin() {
 
   const [editAdmin,setEditAdmin]=useState([])
+  const [imageState,setImageState]=useState()
   // const [updateAdmin,setUpdateAdmin]=useState([])
 
   const id='6551ab2e5851b4143f7e107e'
@@ -38,7 +39,7 @@ export default function EditAdmin() {
   console.log(editAdmin,'updateAdmin');
 
   const handleFileInputChange = (e) => {
-    // Handle file input change logic here
+    setImageState({...imageState,[e.target.name]:e.target.files[0]})
   };
 
   const handleSubmit = (e) => {
@@ -123,14 +124,14 @@ export default function EditAdmin() {
           /> */}
 
           {/* File Input for Profile Picture */}
-          <input
+          {/* <input
             accept="image/*"
             id="profile-pic-input"
             type="file"
             style={{ display: 'none' }}
             onChange={handleFileInputChange}
-          />
-          <label htmlFor="profile-pic-input" sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
+          /> */}
+          {/* <label htmlFor="profile-pic-input" sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
             <TextField
               variant="outlined"
               fullWidth
@@ -156,7 +157,15 @@ export default function EditAdmin() {
             >
               upload file image
             </Button>
-          </label>
+          </label> */}
+
+          <img src={editAdmin?.profilePic} style={{width:100}} alt="profielpic" />
+
+          <TextField
+            type='file'
+            fullWidth
+            onChange={handleFileInputChange}
+          />
 
           {/* Submit Button */}
           <Button

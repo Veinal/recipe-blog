@@ -14,8 +14,9 @@ import black from '../black.jpg'
 import { useState,useEffect } from 'react';
 import Axios from 'axios';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate,Link } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import CommentIcon from '@mui/icons-material/Comment';
 
 
 export default function ImgMediaCard() {
@@ -100,18 +101,29 @@ export default function ImgMediaCard() {
                 <CardMedia
                   component="img"
                   alt="green iguana"
-                  height="140"
-                  image={rec.image}
+                  height="275"
+                  image={`http://localhost:7000/uploads/recipe/${rec?.image}`}
+                  style={{objectFit:'cover'}}
                 />
                 <CardContent>
                   <Typography style={{display:'flex',flexDirection:'column'}}>
                     <h6><b>Recipe name: </b>{rec.recipeName} </h6>
-                    <h6><b>Description: </b>{rec.description}</h6>
+                    <h6><b>Category: </b>{rec.category}</h6>
                   </Typography>
                 </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
+                <CardActions style={{display:'flex',justifyContent:'space-between'}}>
+                  <div style={{display:'flex',justifyContent:'space-between',gap:'5%'}}> 
+                    <Rating
+                      name="simple-controlled"
+                      // value={value}
+                      // onChange={(event, newValue) => {
+                      //   setValue(newValue);
+                      // }}
+                    />
+                    <CommentIcon/>
+                  </div>
+                  <Link to={`/viewrecipe/${rec._id}`}><Button variant='contained'>View</Button></Link>
+                  {/* <Button size="small">Learn More</Button> */}
                 </CardActions>
               </Card>
             </>
@@ -136,7 +148,12 @@ export default function ImgMediaCard() {
             </Typography>
           </div>
         </CardContent>
-        <CardActions style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+        <CardActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+          <Link to='#'>
+            <Button variant='contained' color='primary' style={{ color: 'white' }}>
+              My Requests
+            </Button>
+          </Link>
           <Button onClick={handleReqSubmit} variant='contained' style={{ backgroundColor: '#4CAF50', color: 'white' }}>
             Submit
           </Button>

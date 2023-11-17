@@ -13,7 +13,10 @@ import { useNavigate,useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 export default function EditRecipelist() {
     const params=useParams()
@@ -22,6 +25,8 @@ export default function EditRecipelist() {
     let recipeID=params.id;
 
     const [viewRecipes,setViewRecipes]=useState([])
+    const [getCategory,setGetCategory]=useState([])
+    const [selectedCategory,setSelectedCategory]=useState()
 
     useEffect(()=>{
         axios.get(`http://localhost:7000/api/recipes/singleview/${recipeID}`)
@@ -32,18 +37,45 @@ export default function EditRecipelist() {
             alert(err)
         })
     },[])
-    console.log(viewRecipes,'viewrecipes')
+
+    // useEffect(()=>{
+    //     axios.get('http://localhost:7000/api/categories/view')
+    //     .then((res)=>{
+    //         console.log(res.data);
+    //         setGetCategory(res.data)
+    //     }).catch((err)=>{
+    //         alert(err)
+    //     })
+    // },[])
 
     const handleChange=(e)=>{
         setViewRecipes({...viewRecipes,[e.target.name]:e.target.value})
     }
 
     const handleFileChange=(e)=>{
-
+        setViewRecipes({...viewRecipes,[e.target.name]:e.target.files[0]})
     }
 
+    const handleCategory=(e)=>{
+        // alert(e.target.value)
+        setViewRecipes(e.target.value)
+    }
+    console.log(viewRecipes,'viewrecipes')
+
+
     const handleSubmit=async(e)=>{
-        axios.put(`http://localhost:7000/api/recipes/update/${recipeID}`,viewRecipes)
+        e.preventDefault()
+
+        const Data=new FormData()
+        Data.append("recipeName",viewRecipes.recipeName)
+        Data.append("image",viewRecipes.image)
+        Data.append("ingredients",viewRecipes.ingredients)
+        Data.append("category_id",selectedCategory)
+        Data.append("description",viewRecipes.description)
+        Data.append("instructions",viewRecipes.instructions)
+        Data.append("video",viewRecipes.video)
+
+        axios.put(`http://localhost:7000/api/recipes/update/${recipeID}`,Data)
         .then((res)=>{
             console.log('res',res.data);
           })
@@ -71,27 +103,42 @@ export default function EditRecipelist() {
                 <label>Recipe Name:</label>
                 <TextField
                     name='recipeName'
-                    value={viewRecipes?.recipeName}
+                    value={viewRecipes?.recipeName|| ''}
                     onChange={(e)=>handleChange(e)}
                     label="Enter Recipe Name"
                     variant="outlined"
                     margin="normal"
                 />
                 <label>Category:</label>
-                <TextField
+                {/* <TextField
                     name='category'
                     value={viewRecipes?.category}
                     onChange={(e)=>handleChange(e)}
                     label="Enter "
                     variant="outlined"
                     margin="normal"
-                />
+                /> */}
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Category:</InputLabel>
+                    <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={getCategory?.category_id}
+                    name="category_id"
+                    label=""
+                    onChange={(e)=>handleCategory(e)}
+                    >
+                    {getCategory?.map((item)=>{
+                        return(<MenuItem value={item._id}>{item.name}</MenuItem>)
+                    })}                       
+                    </Select>
+                </FormControl>
                 <label>Description:</label>
                 <TextField 
                     name='description'
                     value={viewRecipes?.description}  
                     onChange={(e)=>handleChange(e)}       
-                    label="Enter Recipe Name"
+                    label="Enter Description"
                     variant="outlined"
                     margin="normal"
                 />
@@ -112,7 +159,7 @@ export default function EditRecipelist() {
                     name='instructions'
                     value={viewRecipes?.instructions}
                     onChange={(e)=>handleChange(e)}
-                    label="Enter Ingredients"
+                    label="Enter Instructions"
                     variant="outlined"
                     margin="normal"
                     multiline
@@ -123,7 +170,7 @@ export default function EditRecipelist() {
                     name='video'
                     value={viewRecipes?.video}
                     onChange={(e)=>handleChange(e)}
-                    label="Enter Recipe Name"
+                    label="Enter Video"
                     variant="outlined"
                     margin="normal"
                 />

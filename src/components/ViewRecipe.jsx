@@ -5,8 +5,43 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 export default function ActionAreaCard() {
+  const params=useParams()
+  const [recipeState,setRecipeState]=useState([])
+  const [otherRecipes,setOtherRecipes]=useState([])
+
+  let recipeID=params.id;
+  console.log(recipeID,123)
+
+  useEffect(()=>{
+    axios.get(`http://localhost:7000/api/recipes/singleview/${recipeID}`)
+    .then((res)=>{
+      console.log(res.data)
+      setRecipeState(res.data)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
+  useEffect(() => {
+    axios.get('http://localhost:7000/api/recipes/view')
+      .then((res) => {
+        // Shuffle the array of recipes
+        const shuffledRecipes = res.data.sort(() => 0.5 - Math.random());
+        // Get the first 3 recipes for display
+        const selectedRecipes = shuffledRecipes.slice(0, 4);
+        setOtherRecipes(selectedRecipes);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -16,41 +51,55 @@ export default function ActionAreaCard() {
             <CardActionArea>
               <CardMedia
                 component="img"
-                height="400"
-                image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
+                height="500"
+                image={`http://localhost:7000/uploads/recipe/${recipeState?.image}`}
                 alt="green iguana"
+                style={{objectFit:'cover',borderRadius:'2%'}}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Lizard
+                  <h2>{recipeState?.recipeName}</h2>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
+                  <h5>Description:</h5>
+                  {recipeState?.description}
+                  <br /><br />
+                  <h5>Ingredients:</h5>
+                  {recipeState?.ingredients}
+                  <br /><br />
+                  <h5>Instructions:</h5>
+                  {recipeState?.instructions}
+                  <br /><br />
+                  <h5>Video Link:</h5>
+                  {recipeState?.video}
+                  <br /><br />
+
                 </Typography>
               </CardContent>
             </CardActionArea>
           </Card>
         </Grid>
   
-        {/* Related Images */}
-        <Grid item xs={12} md={4} >
-          <div style={{marginLeft:'5%'}}><h3 ><b>Related Recipes:</b></h3></div>
-          {/* Replace the loop with your data */}
-          {[1, 2, 3].map((index) => (
-            <Card key={index} sx={{ maxWidth: 345 }}>
+        <Grid item xs={12} md={4}>
+          <div style={{ marginLeft: '5%' }}>
+            <h3><b>Other Recipes:</b></h3>
+          </div>
+          {/* Display only 3 random recipes */}
+          {otherRecipes.map((recipe, index) => (
+            <Card key={index} sx={{ maxWidth: 345,marginBottom:'1%' }}>
               <CardActionArea>
                 <CardMedia
                   component="img"
-                  height="140"
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  alt={`green iguana ${index}`}
+                  height="250"
+                  image={`http://localhost:7000/uploads/recipe/${recipe.image}`}
+                  alt={`Recipe ${index}`}
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Lizard {index}
+                    {recipe.recipeName}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
+                    {recipe.description}
                   </Typography>
                 </CardContent>
               </CardActionArea>

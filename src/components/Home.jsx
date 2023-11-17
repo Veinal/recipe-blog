@@ -20,6 +20,8 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardMedia from '@mui/material/CardMedia';
 import Axios from 'axios';
+import Rating from '@mui/material/Rating';
+import CommentIcon from '@mui/icons-material/Comment';
 
 
 function shuffleArray(array) {
@@ -231,22 +233,28 @@ export default function Home() {
         {displayedRecipes.map((rec) => (
           <React.Fragment key={rec.id}>
             <Card sx={{ maxWidth: 345 }}>
-              <CardMedia component="img" alt="green iguana" height="140" image={rec.image} />
+              <CardMedia component="img" alt="green iguana" height="250" image={`http://localhost:7000/uploads/recipe/${rec?.image}`} />
               <CardContent>
                 <Typography style={{ display: 'flex', flexDirection: 'column' }}>
-                  <h6>
-                    <b>Recipe name: </b>
+                  <h5>
+                    <b>Recipe: </b>
                     {rec.recipeName}{' '}
-                  </h6>
-                  <h6>
+                  </h5>
+                  {/* <h6>
                     <b>Description: </b>
                     {rec.description}
-                  </h6>
+                  </h6> */}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
+              <CardActions style={{display:'flex',justifyContent:'space-between'}}>
+              <Rating
+                name="simple-controlled"
+                // value={value}
+                // onChange={(event, newValue) => {
+                //   setValue(newValue);
+                // }}
+              />
+                <CommentIcon/>
               </CardActions>
             </Card>
           </React.Fragment>
