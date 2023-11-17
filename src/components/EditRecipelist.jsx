@@ -64,6 +64,7 @@ export default function EditRecipelist() {
 
 
     const handleSubmit=async(e)=>{
+        console.log(viewRecipes)
         e.preventDefault()
 
         const Data=new FormData()

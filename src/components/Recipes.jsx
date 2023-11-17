@@ -108,7 +108,7 @@ export default function ImgMediaCard() {
                 <CardContent>
                   <Typography style={{display:'flex',flexDirection:'column'}}>
                     <h6><b>Recipe name: </b>{rec.recipeName} </h6>
-                    <h6><b>Category: </b>{rec.category}</h6>
+                    <h6><b>Category: </b>{rec.category_id?.name}</h6>
                   </Typography>
                 </CardContent>
                 <CardActions style={{display:'flex',justifyContent:'space-between'}}>

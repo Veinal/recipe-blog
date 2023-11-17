@@ -9,6 +9,10 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import Checkbox from '@mui/material/Checkbox';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+
 
 export default function ActionAreaCard() {
   const params=useParams()
@@ -27,6 +31,7 @@ export default function ActionAreaCard() {
       alert(err)
     })
   },[])
+console.log(recipeState,100)
 
   useEffect(() => {
     axios.get('http://localhost:7000/api/recipes/view')
@@ -41,6 +46,15 @@ export default function ActionAreaCard() {
         alert(err);
       });
   }, []);
+
+  //Favorites code
+  const [checked, setChecked] = useState(true);
+  const [favState,setFavState]=useState()
+
+  const handleFavChange = (event) => {
+    setChecked(event.target.checked);
+    
+  };
 
   return (
     <div>
@@ -57,12 +71,22 @@ export default function ActionAreaCard() {
                 style={{objectFit:'cover',borderRadius:'2%'}}
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
+                <Typography style={{display:'flex',justifyContent:'space-between'}} gutterBottom variant="h5" component="div">
                   <h2>{recipeState?.recipeName}</h2>
+                  <Checkbox
+                    icon={<FavoriteBorderIcon style={{color:'red',marginTop:'-15px'}} fontSize='large'/>}
+                    checkedIcon={<FavoriteIcon style={{color:'red',marginTop:'-15px'}} fontSize='large'/>}
+                    checked={checked}
+                    onChange={handleFavChange}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   <h5>Description:</h5>
                   {recipeState?.description}
+                  <br /><br />
+                  <h5>Category:</h5>
+                  {recipeState.category_id?.name}
                   <br /><br />
                   <h5>Ingredients:</h5>
                   {recipeState?.ingredients}

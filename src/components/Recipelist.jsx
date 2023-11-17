@@ -359,7 +359,7 @@ console.log(getCategory,'ca')
                 <h4><label><b>recipe name:</b></label> {selected.recipeName}</h4>
                 <h4><label><b>description:</b></label> {selected.ingredients}</h4>
                 <h4><label><b>category:</b></label> {selected.category_id?.name}</h4>
-                <h4><label><b>ingredients:</b></label> {selected.category}</h4>
+                <h4><label><b>ingredients:</b></label> {selected.ingredients}</h4>
                 <h4><label><b>instructions:</b></label> {selected.description}</h4>
                 <h4><label><b>video:</b></label> {selected.video}</h4>
                 <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
