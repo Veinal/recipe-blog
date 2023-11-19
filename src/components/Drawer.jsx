@@ -19,7 +19,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../logo.png'
 
 const drawerWidth = 200;
@@ -35,6 +35,14 @@ const customTheme = createTheme({
 // }
 
 export default function ClippedDrawer() {
+  const navigate=useNavigate()
+
+  const HandleLogout=()=>{
+    localStorage.removeItem("Admin")
+    localStorage.removeItem("AdminToken")
+    navigate('/')
+  }
+
   return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -53,7 +61,7 @@ export default function ClippedDrawer() {
               ADMIN DASHBOARD
             </Typography>
             <div style={{marginLeft: 'auto'}}> 
-              <Button variant='contained' color='inherit'>LOGOUT</Button>
+              <Button onClick={HandleLogout} variant='contained' color='inherit'>LOGOUT</Button>
             </div>
           </Toolbar>
         </AppBar>

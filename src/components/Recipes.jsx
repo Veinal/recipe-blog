@@ -97,7 +97,7 @@ export default function ImgMediaCard() {
         {getRecipes?.map((rec)=>{
           return(
             <>
-              <Card sx={{ maxWidth: 345 }}>
+              <Card className='animate__animated animate__flipInY' sx={{ maxWidth: 345 }}>
                 <CardMedia
                   component="img"
                   alt="green iguana"
@@ -149,7 +149,7 @@ export default function ImgMediaCard() {
           </div>
         </CardContent>
         <CardActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-          <Link to='#'>
+          <Link to='/myrequests'>
             <Button variant='contained' color='primary' style={{ color: 'white' }}>
               My Requests
             </Button>

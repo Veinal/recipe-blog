@@ -52,19 +52,20 @@ export default function SignInSide() {
         console.log("login successful");
         console.log(res.data);
         const auth =res.data.authtoken
-        localStorage.setItem("Token",JSON.stringify(auth))
+        localStorage.setItem("UserToken",JSON.stringify(auth))
         localStorage.setItem("User",JSON.stringify(res.data.user))
         navigate('/')
       }
       else{
         console.log(res.data.error);
+        alert('Invalid Email or Password!!!')
       }
     })
     .catch((err)=>{
       console.log(err);
     })
 
-    await navigate('/')
+    // await navigate('/')
   };
 
   return (

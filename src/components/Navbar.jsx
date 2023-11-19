@@ -1,8 +1,39 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../logo.png'
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Navbar() {
+    const [userState,setUserState]=useState([])
+    const navigate=useNavigate()
+    const isLoggedIn =userState.length>0;
+    
+    useEffect(()=>{
+        const userData=JSON.parse(localStorage.getItem("User"))
+        console.log(userData,'userData')
+        // setUserState(userData)
+        if (userData) {
+        setUserState([userData]); // Wrapping userData in an array
+        }
+    },[])
+
+    const [loggedUser,setLoggedUser]=useState()
+
+    useEffect(()=>{
+        let user=JSON.parse(localStorage.getItem("User"))
+        setLoggedUser(user)
+    },[])
+    
+    const Logout=()=>{
+        navigate('/')
+        localStorage.removeItem("UserToken")
+        localStorage.removeItem("User")
+        setUserState([])
+        window.location.reload()
+    }
+    
+
   return (
     <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -29,54 +60,65 @@ export default function Navbar() {
                 style={{borderRadius:'50%'}}
                 />
             </a>
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">   
                 <li className="nav-item">
                 <Link to='/'><a className="nav-link" href="#">Home</a></Link>
                 </li>
+                
+                {/* displaying these only if the user is logged in */}
+                {loggedUser && (
                 <li className="nav-item">
                 <Link to='/recipes'><a className="nav-link" href="#">Recipes</a></Link>
                 </li>
+                )}
+
+                {loggedUser && (
+                <li className="nav-item">
+                <Link to='/favorites'><a className="nav-link" href="#">Favorites</a></Link>
+                </li>
+                )}
+
                 <li className="nav-item">
                 <Link to='/aboutus'><a className="nav-link" href="#">About Us</a></Link>
                 </li>
+                
             </ul>
             </div>
 
             <div className="d-flex align-items-center">
-
-            <div className="dropdown">
-                <a
-                className="dropdown-toggle d-flex align-items-center hidden-arrow"
-                href="#"
-                id="navbarDropdownMenuAvatar"
-                role="button"
-                data-mdb-toggle="dropdown"
-                aria-expanded="false"
-                >
-                <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                    className="rounded-circle"
-                    height="25"
-                    alt="Black and White Portrait of a Man"
-                    loading="lazy"
-                />
-                </a>
-                <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarDropdownMenuAvatar"
-                >
-                {/* <li>
-                    <a className="dropdown-item" href="#">My profile</a>
-                </li>
-                <li>
-                    <a className="dropdown-item" href="#">Settings</a>
-                </li> */}
-                <li>
-                    <a className="dropdown-item" href="#">Logout</a>
-                </li>
-                </ul>
-            </div>
+                {isLoggedIn ? (
+                userState.map((u) => (
+                    <div key={u._id} className="dropdown">
+                        <a
+                            className="dropdown-toggle d-flex align-items-center hidden-arrow"
+                            href="#"
+                            id="navbarDropdownMenuAvatar"
+                            role="button"
+                            data-mdb-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <span style={{color:'black'}} className="ms-2">Hi, {u?.userName}</span> {/* Assuming name is available in userData */}
+                            <img
+                                src={u?.picture}
+                                className="rounded-circle"
+                                height="25"
+                                alt="Profile"
+                                loading="lazy"
+                            />
+                        </a>
+                        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            {/* Other dropdown items */}
+                            <li>
+                                <a onClick={Logout} className="dropdown-item" href="#">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                ))
+                ):(
                 <Link to='/login'><button type="button" class="btn btn-primary">Login</button></Link>
+                )}
             </div>
         </div>
         </nav>

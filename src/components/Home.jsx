@@ -34,6 +34,12 @@ function shuffleArray(array) {
 }
 
 export default function Home() {
+    const [loggedUser,setLoggedUser]=useState()
+
+    useEffect(()=>{
+      const user= JSON.parse(localStorage.getItem("User"))
+      setLoggedUser(user)
+    },[])
 
     useEffect(() => {
         // Get the carousel element by its ID
@@ -198,7 +204,11 @@ export default function Home() {
         <div style={{display:'flex',justifyContent:'center'}}><img src={recipesvg} alt="" /></div>
         <br />
         <div style={{display:'flex',justifyContent:'end'}}>
-          <Link to='/recipes'><button class="shadow__btn">More Recipes</button></Link>
+          {loggedUser ? (
+            <Link to='/recipes'><button class="shadow__btn">More Recipes</button></Link>
+          ):(
+            <button onClick={()=>{alert('Login required!!!')}} class="shadow__btn" >More Recipes</button>     
+          )}
         </div>
        
 

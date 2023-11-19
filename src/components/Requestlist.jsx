@@ -65,9 +65,21 @@ export default function ClippedDrawer() {
 
   useEffect(()=>{
     axios.get('http://localhost:7000/api/request/view')
-    .then((res)=>{
-      console.log(res.data);
-      setGetRequests(res.data)
+    // .then((res)=>{
+    //   console.log(res.data);
+    //   setGetRequests(res.data)
+    .then((res) => {
+      // Assuming 'date' is a string representing the date from the API response
+      const formattedData = res.data.map((item) => ({
+        ...item,
+        // Format 'date' to a more readable format (assuming 'date' is a string)
+        date: new Date(item.date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }),
+      }));
+      setGetRequests(formattedData);
     }).catch((err)=>{
       alert(err)
     })

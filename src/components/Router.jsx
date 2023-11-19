@@ -17,6 +17,8 @@ import Login from './Login'
 import AdminLogin from './AdminLogin'
 import EditRecipelist from './EditRecipelist'
 import EditCateglist from './EditCateglist'
+import Favorites from './Favorites'
+import MyRequests from './MyRequests'
 
 export default function Router() {
   // Create a higher-order component (HOC) for routes that need the Navbar
@@ -45,6 +47,8 @@ export default function Router() {
                 <Route exact path='/adminlogin' element={<AdminLogin/>}/>
                 <Route exact path='/editrecipelist/:id' element={<EditRecipelist/>}/>
                 <Route exact path='/editcateglist/:id' element={<EditCateglist/>}/>
+                <Route exact path='/favorites' element={<WithNavbar><Favorites/></WithNavbar>}/>
+                <Route exact path='/myrequests' element={<WithNavbar><MyRequests/></WithNavbar>}/>
 
                 <Route exact path='/recipes' element={<WithNavbar><Recipes/></WithNavbar>} />
                 <Route exact path='/aboutus' element={<WithNavbar><Aboutus/></WithNavbar>} />

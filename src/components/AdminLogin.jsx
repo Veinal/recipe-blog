@@ -58,6 +58,7 @@ export default function SignInSide() {
       }
       else{
         console.log(res.data.error);
+        alert('Invalid Email or Password!!!')
       }
     })
     // await navigate('/admindashboard')

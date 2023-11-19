@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea } from '@mui/material';
+import { Button, CardActionArea } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -47,14 +47,33 @@ console.log(recipeState,100)
       });
   }, []);
 
-  //Favorites code
-  const [checked, setChecked] = useState(true);
-  const [favState,setFavState]=useState()
+  // const HandleSubmit=()=>{
+  //   axios.post('http://localhost:7000/api/favorites/addfavorites',{recipeID:recipeState._id})
+  //   .then((res)=>{
+  //     console.log(res.data)
+  //     alert("added to Favorites")
+  //   })
+  //   .catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }
 
-  const handleFavChange = (event) => {
-    setChecked(event.target.checked);
-    
+  const HandleSubmit = () => {
+    axios.post('http://localhost:7000/api/favorites/addfavorites', { recipeID: recipeState._id })
+      .then((res) => {
+        console.log(res.data);
+        alert('Added to Favorites');
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 400) {
+          alert(err.response.data.message); // Display the error message to the user
+        } else {
+          console.log(err);
+          alert('Error adding to Favorites');
+        }
+      });
   };
+  
 
   return (
     <div>
@@ -62,7 +81,7 @@ console.log(recipeState,100)
         {/* Large Card */}
         <Grid item xs={12} md={8}>
           <Card sx={{ maxWidth: 900, maxHeight: '100%',marginLeft:'3%' }}>
-            <CardActionArea>
+            {/* <CardActionArea> */}
               <CardMedia
                 component="img"
                 height="500"
@@ -73,13 +92,7 @@ console.log(recipeState,100)
               <CardContent>
                 <Typography style={{display:'flex',justifyContent:'space-between'}} gutterBottom variant="h5" component="div">
                   <h2>{recipeState?.recipeName}</h2>
-                  <Checkbox
-                    icon={<FavoriteBorderIcon style={{color:'red',marginTop:'-15px'}} fontSize='large'/>}
-                    checkedIcon={<FavoriteIcon style={{color:'red',marginTop:'-15px'}} fontSize='large'/>}
-                    checked={checked}
-                    onChange={handleFavChange}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                  />
+                  <Button onClick={HandleSubmit} variant='contained' color='error'><FavoriteIcon/>Add to Favorites</Button>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   <h5>Description:</h5>
@@ -100,7 +113,7 @@ console.log(recipeState,100)
 
                 </Typography>
               </CardContent>
-            </CardActionArea>
+            {/* </CardActionArea> */}
           </Card>
         </Grid>
   
@@ -111,7 +124,7 @@ console.log(recipeState,100)
           {/* Display only 3 random recipes */}
           {otherRecipes.map((recipe, index) => (
             <Card key={index} sx={{ maxWidth: 345,marginBottom:'1%' }}>
-              <CardActionArea>
+              {/* <CardActionArea> */}
                 <CardMedia
                   component="img"
                   height="250"
@@ -126,7 +139,7 @@ console.log(recipeState,100)
                     {recipe.description}
                   </Typography>
                 </CardContent>
-              </CardActionArea>
+              {/* </CardActionArea> */}
             </Card>
           ))}
         </Grid>

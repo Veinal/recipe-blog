@@ -83,7 +83,7 @@ export default function EditRecipelist() {
                 <InputLabel id="demo-simple-select-label" style={{color:'black'}}>Status:</InputLabel>
                     <Select
                         name='status'
-                        value={viewCategory?.status}
+                        value={viewCategory?.status || ''}
                         onChange={(e) => HandleChange(e)}
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
