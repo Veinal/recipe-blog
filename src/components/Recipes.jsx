@@ -12,11 +12,11 @@ import backimg1 from '../backimg1.jpg'
 // import blackbg from '../blackbg.jpg'
 import black from '../black.jpg'
 import { useState,useEffect } from 'react';
-import Axios from 'axios';
 import axios from 'axios';
 import { useNavigate,Link } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import CommentIcon from '@mui/icons-material/Comment';
+
 
 
 export default function ImgMediaCard() {
@@ -24,9 +24,18 @@ export default function ImgMediaCard() {
   const [getRecipes,setGetRecipes]=useState([])
   const [requestState,setRequestState]=useState()
   const navigate=useNavigate()
+  const [user,setUser]=useState('')
 
   useEffect(()=>{
-    Axios.get('http://localhost:7000/api/recipes/view')
+    if(localStorage.getItem("UserToken")===null){
+      navigate('/login')
+    }else{
+      setUser(JSON.parse(localStorage.getItem("UserToken")))
+    }
+  },[])
+
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/recipes/view')
     .then((res)=>{
       console.log(res.data,'res');
       setGetRecipes(res.data)
@@ -40,11 +49,41 @@ export default function ImgMediaCard() {
     setRequestState({...requestState,[e.target.name]:e.target.value})
   }
   console.log(requestState,'req')
+  
+  const [getCategories,setGetCategories]=useState([])
+  
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/categories/view')
+    .then((res)=>{
+      console.log(res.data)
+      setGetCategories(res.data)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
+  const [searchState,setSearchState]=useState('')
+  const [filterState,setFilterState]=useState('')
+
+  const HandleSearch=(e)=>{
+    setSearchState(e.target.value)
+  }
+  
+  const HandleFilter=(filter)=>{
+    setFilterState(filter)
+  }
+  
+  const filteredRecipes = getRecipes.filter((recipe) => {
+    return (
+      recipe.recipeName.toLowerCase().includes(searchState.toLowerCase()) &&
+      (filterState === '' || recipe.category_id?.name === filterState)
+    );
+  });  
 
   const handleReqSubmit=(e)=>{
     e.preventDefault();
 
-    axios.post('http://localhost:7000/api/request/insert',requestState)
+    axios.post('http://localhost:7000/api/request/insert',requestState,{headers:{"UserToken":user}})
     .then((res)=>{
       console.log(res.data)
       // setRequestState(res.data)
@@ -73,16 +112,48 @@ export default function ImgMediaCard() {
           >
             <i class="fas fa-filter fa-2x"></i>
           </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
+          {/* <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {getCategories.map((categ)=>(
+              <li><a onClick={()=>HandleFilter(categ.name)} class="dropdown-item" href="#">{categ?.name}</a></li>
+            ))}
+          </ul> */}
+          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{ padding: '10px' }}>
+            <li>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="selectAll"
+                  onChange={() => HandleFilter('')}
+                  defaultChecked
+                />
+                <label className="form-check-label" htmlFor="selectAll" >
+                  Select All
+                </label>
+              </div>
+            </li>
+            {getCategories.map((categ) => (
+              <li key={categ._id}>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id={categ._id}
+                    onChange={() => HandleFilter(categ.name)}
+                  />
+                  <label className="form-check-label" htmlFor={categ._id}>
+                    {categ?.name}
+                  </label>
+                </div>
+              </li>
+            ))}
+          </ul>      
+           
         </div>
 
         <div class="input-group" style={{ maxWidth: '300px' }}>
           <div class="form-outline" style={{ flex: 1 }}>
-            <input type="search" id="form1" class="form-control" style={{ padding: '0.375rem',border:'1px solid black',backgroundColor:'white' }} />
+            <input value={searchState} onChange={(e)=>HandleSearch(e)} type="search" id="form1" class="form-control" style={{ padding: '0.375rem',border:'1px solid black',backgroundColor:'white' }} />
             <label class="form-label" for="form1">Search</label>
           </div>
           <button type="button" class="btn btn-primary">
@@ -94,7 +165,7 @@ export default function ImgMediaCard() {
       <br />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
-        {getRecipes?.map((rec)=>{
+        {filteredRecipes?.map((rec)=>{
           return(
             <>
               <Card className='animate__animated animate__flipInY' sx={{ maxWidth: 345 }}>

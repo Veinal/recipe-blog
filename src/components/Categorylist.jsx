@@ -234,7 +234,7 @@ export default function ClippedDrawer() {
                 margin="normal"
                 onChange={(e)=>HandleChange(e)}
               >
-                <MenuItem value="available">available</MenuItem>
+                <MenuItem value="available" >available</MenuItem>
                 <MenuItem value="not available">not available</MenuItem>
               </Select>
             </div>

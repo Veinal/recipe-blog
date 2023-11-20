@@ -11,6 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import Chip from '@mui/material/Chip';
+
 // import Paper from '@mui/material/Paper';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -49,7 +51,8 @@ export default function SimplePaper() {
     const [getRequest,setGetRequest]=useState([])
 
     useEffect(()=>{
-        axios.get('http://localhost:7000/api/request/view')
+        const user=JSON.parse(localStorage.getItem("UserToken"))
+        axios.get('http://localhost:7000/api/request/view',{headers:{"UserToken":user}})
         // .then((res)=>{
         //     console.log(res.data)
         //     setGetRequest(res.data)
@@ -101,7 +104,16 @@ export default function SimplePaper() {
                         <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                         <StyledTableCell>{row.request}</StyledTableCell>
                         <StyledTableCell>{row.date}</StyledTableCell>
-                        <StyledTableCell>{row.status}</StyledTableCell>
+                        <StyledTableCell>
+                          {(row.status)==='accepted' ? 
+                            <Chip label="Accepted" color="success" /> 
+                            :
+                            (row.status)==='rejected' ?
+                              <Chip label="Rejected" color="error" />
+                            :
+                            <Chip label="Pending" color="warning" />
+                          }
+                        </StyledTableCell>
                         </StyledTableRow>
                     ))}
                     </TableBody>

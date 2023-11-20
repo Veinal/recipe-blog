@@ -278,7 +278,7 @@ console.log(getCategory,'ca')
                   <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1%'}}>
                     <label>Recipe name:</label><TextField onChange={(e)=>Input(e)} name='recipeName' id="outlined-basic" label="recipe name" variant="outlined" />
                     <label>Image:</label><TextField onChange={(e)=>InputImage(e)} type='file' name='image' id="outlined-basic" label="image" variant="outlined" />
-                    <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline/>
+                    <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline rows={2}/>
                     {/* <label>Category:</label><TextField onChange={(e)=>Input(e)} name='category' id="outlined-basic" label="category" variant="outlined" /> */}
                     <label>Category:</label>
                     <Box sx={{ minWidth: 120 }}>
@@ -298,8 +298,8 @@ console.log(getCategory,'ca')
                           </Select>
                       </FormControl>
                     </Box>
-                    <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline/>
-                    <label>Instructions:</label><TextField onChange={(e)=>Input(e)} name='instructions' id="outlined-basic" label="instructions" variant="outlined" multiline />
+                    <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline rows={3}/>
+                    <label>Instructions:</label><TextField onChange={(e)=>Input(e)} name='instructions' id="outlined-basic" label="instructions" variant="outlined" multiline rows={4}/>
                     <label>Video:</label><TextField onChange={(e)=>Input(e)} name='video' id="outlined-basic" label="video" variant="outlined" />
                   </div>
                 </CardContent>

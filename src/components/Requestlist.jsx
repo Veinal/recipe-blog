@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import Chip from '@mui/material/Chip';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -23,6 +24,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Modal from '@mui/material/Modal';
+
 
 const drawerWidth = 200;
 
@@ -64,7 +66,7 @@ export default function ClippedDrawer() {
   const [count,setCount]=useState(0)
 
   useEffect(()=>{
-    axios.get('http://localhost:7000/api/request/view')
+    axios.get('http://localhost:7000/api/request/viewbyadmin')
     // .then((res)=>{
     //   console.log(res.data);
     //   setGetRequests(res.data)
@@ -118,6 +120,16 @@ export default function ClippedDrawer() {
     await handleCloseDel()
   }
 
+  const HandleStatusUpdate=(requestId,status)=>{
+    axios.put(`http://localhost:7000/api/request/update/${requestId}`,{status})
+    .then((res)=>{
+      console.log(res.data)
+      setCount((prev)=>!prev)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
 
@@ -140,10 +152,11 @@ export default function ClippedDrawer() {
             <TableHead>
               <TableRow>
                 <StyledTableCell>Sl no.</StyledTableCell>
+                <StyledTableCell>User Name</StyledTableCell>
                 <StyledTableCell>Requests</StyledTableCell>
-                <StyledTableCell>Reviews</StyledTableCell>
+                <StyledTableCell>Remarks</StyledTableCell>
                 <StyledTableCell>Date & Time</StyledTableCell>
-                <StyledTableCell>Actions</StyledTableCell>
+                <StyledTableCell>Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -151,12 +164,22 @@ export default function ClippedDrawer() {
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                   <StyledTableCell>{row.request}</StyledTableCell>
+                  <StyledTableCell>{row.request}</StyledTableCell>
                   <StyledTableCell>{row.remarks}</StyledTableCell>
                   <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
-                    {/* <Button variant='contained' color='primary'><EditIcon/></Button> */}
-                    <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
-                    <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
+                  {row.status === 'accepted' ? (
+                      <Chip label="Accepted" color="success" />
+                    ) : row.status === 'rejected' ? (
+                      <Chip label="Rejected" color="error" />
+                    ) : (
+                      <>
+                        <Button variant='contained' color='success' onClick={() => HandleStatusUpdate(row._id, 'accepted')}>accept</Button>
+                        <Button variant='contained' color='error' onClick={() => HandleStatusUpdate(row._id, 'rejected')}>reject</Button>
+                      </>
+                    )}
+                    {/* <Button variant='contained' color='success' onClick={()=>HandleStatusUpdate(row._id,'accepted')}>accept</Button>
+                    <Button variant='contained' color='error' onClick={()=>HandleStatusUpdate(row._id,'rejected')}>reject</Button> */}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -166,7 +189,7 @@ export default function ClippedDrawer() {
         
         <div>
           {/* delete modal card */}
-          <Modal
+          {/* <Modal
             open={open3}
             onClose={handleCloseDel}
             aria-labelledby="modal-modal-title"
@@ -174,7 +197,6 @@ export default function ClippedDrawer() {
           >
             <Box sx={style2}>
             <Card>
-              {/* <img width={'200px'} src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg" alt="" /> */}
                 
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -189,10 +211,10 @@ export default function ClippedDrawer() {
               
             </Card>
             </Box>
-          </Modal>
+          </Modal> */}
 
           {/* view modal card */}
-          <Modal
+          {/* <Modal
             open={open2}
             onClose={handleCloseView}
             aria-labelledby="modal-modal-title"
@@ -214,7 +236,7 @@ export default function ClippedDrawer() {
               
             </Card>
             </Box>
-          </Modal>
+          </Modal> */}
         </div>
       </Box>
     </Box>

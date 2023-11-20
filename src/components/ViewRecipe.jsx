@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -18,6 +18,16 @@ export default function ActionAreaCard() {
   const params=useParams()
   const [recipeState,setRecipeState]=useState([])
   const [otherRecipes,setOtherRecipes]=useState([])
+  const [user,setUser]=useState("")
+  const navigate=useNavigate()
+
+  useEffect(()=>{
+    if(localStorage.getItem("UserToken")===null){
+      navigate('/login')
+    }else{
+      setUser(JSON.parse(localStorage.getItem("UserToken")))
+    }
+  },[])
 
   let recipeID=params.id;
   console.log(recipeID,123)
@@ -59,7 +69,7 @@ console.log(recipeState,100)
   // }
 
   const HandleSubmit = () => {
-    axios.post('http://localhost:7000/api/favorites/addfavorites', { recipeID: recipeState._id })
+    axios.post('http://localhost:7000/api/favorites/addfavorites', { recipeID: recipeState._id },{headers:{"UserToken":user}})
       .then((res) => {
         console.log(res.data);
         alert('Added to Favorites');

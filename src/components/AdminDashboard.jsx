@@ -7,10 +7,58 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import dashimg from '../dashimg.jpg'
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 const drawerWidth = 200;
 
 export default function ClippedDrawer() {
+  const [getUsers,setGetUsers]=useState([])
+  const [getCategories,setGetCategories]=useState([])
+  const [getRecipes,setGetRecipes]=useState([])
+  const [getRequest,setGetRequest]=useState([])
+
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/registration/view')
+    .then((res)=>{
+      console.log(res.data)
+      setGetUsers(res.data.length)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/categories/view')
+    .then((res)=>{
+      console.log(res.data)
+      setGetCategories(res.data.length)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/recipes/view')
+    .then((res)=>{
+      console.log(res.data)
+      setGetRecipes(res.data.length)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/request/view')
+    .then((res)=>{
+      console.log(res.data)
+      setGetRequest(res.data.length)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
   return (
     <Box sx={{ display: 'flex' }}>
 
@@ -30,10 +78,10 @@ export default function ClippedDrawer() {
             <Card sx={{ minWidth: 200, backgroundColor: '#FFD700' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Card 1
+                   Users
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Number: 10
+                  Total users: {getUsers}
                 </Typography>
               </CardContent>
             </Card>
@@ -44,10 +92,10 @@ export default function ClippedDrawer() {
             <Card sx={{ minWidth: 200, backgroundColor: '#FF6347' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Card 2
+                  Categories
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Number: 20
+                  Total categories: {getCategories}
                 </Typography>
               </CardContent>
             </Card>
@@ -58,10 +106,10 @@ export default function ClippedDrawer() {
             <Card sx={{ minWidth: 200, backgroundColor: '#40E0D0' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Card 3
+                  Recipes
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Number: 30
+                  Total recipes: {getRecipes}
                 </Typography>
               </CardContent>
             </Card>
@@ -72,10 +120,10 @@ export default function ClippedDrawer() {
             <Card sx={{ minWidth: 200, backgroundColor: '#98FB98' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Card 4
+                  Requests
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Number: 40
+                  Total requests: {getRequest}
                 </Typography>
               </CardContent>
             </Card>

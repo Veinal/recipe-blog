@@ -65,7 +65,7 @@ export default function SignUp() {
       console.log(err);
     })
 
-    await navigate('/')
+    await navigate('/login')
 
   };
 

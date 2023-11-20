@@ -20,14 +20,16 @@ export default function Favorites() {
     const [count,setCount]=useState(0)
 
     useEffect(()=>{
-    axios.get('http://localhost:7000/api/favorites/view')
-    .then((res)=>{
-        console.log(res.data)
-        setGetFav(res.data)
-    })
-    .catch((err)=>{
-        alert(err)
-    })
+        const user=JSON.parse(localStorage.getItem("UserToken"))
+        console.log(user,343)
+        axios.get('http://localhost:7000/api/favorites/view',{headers:{"UserToken":user}})
+        .then((res)=>{
+            console.log(res.data)
+            setGetFav(res.data)
+        })
+        .catch((err)=>{
+            alert(err)
+        })
     },[count])
     console.log(getFav,101)
 
