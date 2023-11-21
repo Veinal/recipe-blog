@@ -86,6 +86,7 @@ export default function ClippedDrawer() {
       alert(err)
     })
   },[count])
+  console.log(getRequests,282)
 
   const [selected,setSelected]=useState('')
 
@@ -163,7 +164,7 @@ export default function ClippedDrawer() {
               {getRequests.map((row,index) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
-                  <StyledTableCell>{row.request}</StyledTableCell>
+                  <StyledTableCell>{row.user_id?.userName}</StyledTableCell>
                   <StyledTableCell>{row.request}</StyledTableCell>
                   <StyledTableCell>{row.remarks}</StyledTableCell>
                   <StyledTableCell>{row.date}</StyledTableCell>

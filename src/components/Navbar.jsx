@@ -97,14 +97,14 @@ export default function Navbar() {
                             data-mdb-toggle="dropdown"
                             aria-expanded="false"
                         >
-                            <span style={{color:'black'}} className="ms-2">Hi, {u?.userName}</span> {/* Assuming name is available in userData */}
                             <img
-                                src={u?.picture}
+                                src={`http://localhost:7000/uploads/users/${u?.picture}`}
                                 className="rounded-circle"
-                                height="25"
+                                height="30"
                                 alt="Profile"
                                 loading="lazy"
                             />
+                            <span style={{color:'black'}} className="ms-2">Hi, {u?.userName}</span> {/* Assuming name is available in userData */}
                         </a>
                         <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                             {/* Other dropdown items */}

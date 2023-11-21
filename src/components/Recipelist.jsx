@@ -86,7 +86,7 @@ const style3 = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '80%',
-  maxHeight: '95vh', // Set a maximum height to allow scrolling
+  maxHeight: '100vh', // Set a maximum height to allow scrolling
   overflowY: 'auto', // Enable vertical scrolling if the content exceeds the height
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -94,7 +94,7 @@ const style3 = {
   p: 2,
 };
 
-export default function ClippedDrawer() {
+export default function ClippedDrawer({dep}) {
   const navigate=useNavigate()
 
   const [form,setForm]=useState()
@@ -128,7 +128,7 @@ export default function ClippedDrawer() {
     .catch((err)=>{
       alert(err)
     })
-  },[count])
+  },[count,dep])
   console.log(getRecipes,1);
 
   useEffect(()=>{
@@ -234,7 +234,7 @@ console.log(getCategory,'ca')
                 <StyledTableCell>Category</StyledTableCell>
                 {/* <StyledTableCell>Description</StyledTableCell> */}
                 {/* <StyledTableCell>Instructions</StyledTableCell> */}
-                {/* <StyledTableCell>Videos</StyledTableCell> */}
+                <StyledTableCell>Status</StyledTableCell>
                 <StyledTableCell >Actions</StyledTableCell>
               </TableRow>
             </TableHead>
@@ -250,7 +250,7 @@ console.log(getCategory,'ca')
                   <StyledTableCell>{row.category_id?.name}</StyledTableCell>
                   {/* <StyledTableCell>{row.description}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.instructions}</StyledTableCell> */}
-                  {/* <StyledTableCell>{row.video}</StyledTableCell> */}
+                  <StyledTableCell>{row?.status}</StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
                     <Link to={`/editrecipelist/${row?._id}`}><Button variant='contained' color='primary'><EditIcon/></Button></Link>
                     <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
@@ -278,7 +278,7 @@ console.log(getCategory,'ca')
                   <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1%'}}>
                     <label>Recipe name:</label><TextField onChange={(e)=>Input(e)} name='recipeName' id="outlined-basic" label="recipe name" variant="outlined" />
                     <label>Image:</label><TextField onChange={(e)=>InputImage(e)} type='file' name='image' id="outlined-basic" label="image" variant="outlined" />
-                    <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline rows={2}/>
+                    <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline rows={4}/>
                     {/* <label>Category:</label><TextField onChange={(e)=>Input(e)} name='category' id="outlined-basic" label="category" variant="outlined" /> */}
                     <label>Category:</label>
                     <Box sx={{ minWidth: 120 }}>
@@ -298,7 +298,7 @@ console.log(getCategory,'ca')
                           </Select>
                       </FormControl>
                     </Box>
-                    <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline rows={3}/>
+                    <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline rows={2}/>
                     <label>Instructions:</label><TextField onChange={(e)=>Input(e)} name='instructions' id="outlined-basic" label="instructions" variant="outlined" multiline rows={4}/>
                     <label>Video:</label><TextField onChange={(e)=>Input(e)} name='video' id="outlined-basic" label="video" variant="outlined" />
                   </div>
@@ -357,10 +357,10 @@ console.log(getCategory,'ca')
                 </span>
                 <hr />
                 <h4><label><b>recipe name:</b></label> {selected.recipeName}</h4>
-                <h4><label><b>description:</b></label> {selected.ingredients}</h4>
+                <h4><label><b>description:</b></label> {selected.description}</h4>
                 <h4><label><b>category:</b></label> {selected.category_id?.name}</h4>
                 <h4><label><b>ingredients:</b></label> {selected.ingredients}</h4>
-                <h4><label><b>instructions:</b></label> {selected.description}</h4>
+                <h4><label><b>instructions:</b></label> {selected.instructions}</h4>
                 <h4><label><b>video:</b></label> {selected.video}</h4>
                 <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
               </Typography>

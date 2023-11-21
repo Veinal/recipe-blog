@@ -18,7 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function EditRecipelist() {
+export default function EditRecipelist({setDep,dep}) {
     const params=useParams()
     const navigate=useNavigate()
 
@@ -27,58 +27,75 @@ export default function EditRecipelist() {
     const [viewRecipes,setViewRecipes]=useState([])
     const [getCategory,setGetCategory]=useState([])
     const [selectedCategory,setSelectedCategory]=useState()
+    const [newRecImage,setNewRecImage]=useState(null)
 
     useEffect(()=>{
         axios.get(`http://localhost:7000/api/recipes/singleview/${recipeID}`)
         .then((res)=>{
             console.log(res.data);
             setViewRecipes(res.data)
+            setNewRecImage(res.data?.image)
+            setSelectedCategory(res.data?.category_id?._id)
         }).catch((err)=>{
             alert(err)
         })
     },[])
+    console.log(selectedCategory)
 
-    // useEffect(()=>{
-    //     axios.get('http://localhost:7000/api/categories/view')
-    //     .then((res)=>{
-    //         console.log(res.data);
-    //         setGetCategory(res.data)
-    //     }).catch((err)=>{
-    //         alert(err)
-    //     })
-    // },[])
+    useEffect(()=>{
+        axios.get('http://localhost:7000/api/categories/view')
+        .then((res)=>{
+            console.log(res.data);
+            setGetCategory(res.data)
+        }).catch((err)=>{
+            alert(err)
+        })
+    },[])
 
     const handleChange=(e)=>{
         setViewRecipes({...viewRecipes,[e.target.name]:e.target.value})
     }
 
     const handleFileChange=(e)=>{
-        setViewRecipes({...viewRecipes,[e.target.name]:e.target.files[0]})
+        setNewRecImage(e.target.files[0])
     }
 
     const handleCategory=(e)=>{
         // alert(e.target.value)
-        setViewRecipes(e.target.value)
+        setSelectedCategory(e.target.value)
     }
     console.log(viewRecipes,'viewrecipes')
 
 
     const handleSubmit=async(e)=>{
-        console.log(viewRecipes)
+        // console.log(viewRecipes)
+        // console.log(newRecImage)
         e.preventDefault()
-
+        const final = {
+            recipeName:viewRecipes.recipeName,
+            image:newRecImage,
+            ingredients:viewRecipes.ingredients,
+            category_id:selectedCategory,
+            description:viewRecipes.description,
+            instructions:viewRecipes.instructions,
+            video:viewRecipes.video,
+            status:viewRecipes.status
+        }
+console.log(final)
         const Data=new FormData()
-        Data.append("recipeName",viewRecipes.recipeName)
-        Data.append("image",viewRecipes.image)
-        Data.append("ingredients",viewRecipes.ingredients)
-        Data.append("category_id",selectedCategory)
-        Data.append("description",viewRecipes.description)
-        Data.append("instructions",viewRecipes.instructions)
-        Data.append("video",viewRecipes.video)
+        Data.append("recipeName",final.recipeName)
+        Data.append("image",final.image)
+        Data.append("ingredients",final.ingredients)
+        Data.append("category_id",final.category_id)
+        Data.append("description",final.description)
+        Data.append("instructions",final.instructions)
+        Data.append("video",final.video)
+        Data.append("status",final.status)
 
         axios.put(`http://localhost:7000/api/recipes/update/${recipeID}`,Data)
         .then((res)=>{
             console.log('res',res.data);
+            setDep(!dep)
           })
           .catch((err)=>{
             console.log(err);
@@ -120,11 +137,11 @@ export default function EditRecipelist() {
                     margin="normal"
                 /> */}
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Category:</InputLabel>
+                    <InputLabel id="demo-simple-select-label">{viewRecipes?.category_id?.name}</InputLabel>
                     <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    // value={getCategory?.category_id}
+                    value={selectedCategory}
                     name="category_id"
                     label=""
                     onChange={(e)=>handleCategory(e)}
@@ -142,6 +159,8 @@ export default function EditRecipelist() {
                     label="Enter Description"
                     variant="outlined"
                     margin="normal"
+                    multiline
+                    rows={2}
                 />
 
                 <label>Ingredients:</label>
@@ -153,7 +172,7 @@ export default function EditRecipelist() {
                     variant="outlined"
                     margin="normal"
                     multiline
-                    rows={2}
+                    rows={4}
                 />
                 <label>Instructions:</label>
                 <TextField
@@ -175,12 +194,24 @@ export default function EditRecipelist() {
                     variant="outlined"
                     margin="normal"
                 />
+                {/* <label>Status:</label> */}
+                <InputLabel id="demo-simple-select-label" style={{color:'black'}}>Status:</InputLabel>
+                    <Select
+                        name='status'
+                        value={viewRecipes?.status || ''}
+                        onChange={(e) => handleChange(e)}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                    >
+                        <MenuItem value="available">available</MenuItem>
+                        <MenuItem value="not available">not available</MenuItem>
+                    </Select>
                 <label>Image:</label>
                 <img
                     // name=''
-                    src={viewRecipes?.image}
+                    src={`http://localhost:7000/uploads/recipe/${viewRecipes?.image}`}
                     alt="Recipe Image"
-                    style={{ maxWidth: '100%', height: 'auto' }}
+                    style={{ maxWidth: '15%', height: 'auto' }}
                 />
                 <input type="file" name="image" id="" onChange={(e)=>handleFileChange(e)}/>
                 <br />

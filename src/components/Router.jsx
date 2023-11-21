@@ -19,8 +19,9 @@ import EditRecipelist from './EditRecipelist'
 import EditCateglist from './EditCateglist'
 import Favorites from './Favorites'
 import MyRequests from './MyRequests'
-
+import { useState } from 'react'
 export default function Router() {
+  const [dep,setDep]=useState(false)
   // Create a higher-order component (HOC) for routes that need the Navbar
   const WithNavbar = ({ children }) => (
     <>
@@ -37,7 +38,7 @@ export default function Router() {
                 <Route exact path='/' element={<WithNavbar><Home/></WithNavbar>} />
                 <Route exact path='/admindashboard' element={<AdminDashboard/>} />
                 <Route exact path='/categorylist' element={<Categorylist/>} />
-                <Route exact path='/recipelist' element={<Recipelist/>} />
+                <Route exact path='/recipelist' element={<Recipelist dep={dep}/>} />
                 <Route exact path='/requestlist' element={<Requestlist/>} />
                 <Route exact path='/userslist' element={<Userslist/>} />
                 <Route exact path='/drawer' element={<Drawer/>} />
@@ -45,7 +46,7 @@ export default function Router() {
                 <Route exact path='/signup' element={<SignUp/>}/>
                 <Route exact path='/login' element={<Login/>}/>
                 <Route exact path='/adminlogin' element={<AdminLogin/>}/>
-                <Route exact path='/editrecipelist/:id' element={<EditRecipelist/>}/>
+                <Route exact path='/editrecipelist/:id' element={<EditRecipelist dep={dep} setDep={setDep}/>}/>
                 <Route exact path='/editcateglist/:id' element={<EditCateglist/>}/>
                 <Route exact path='/favorites' element={<WithNavbar><Favorites/></WithNavbar>}/>
                 <Route exact path='/myrequests' element={<WithNavbar><MyRequests/></WithNavbar>}/>

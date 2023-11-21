@@ -50,7 +50,7 @@ export default function ClippedDrawer() {
   },[])
 
   useEffect(()=>{
-    axios.get('http://localhost:7000/api/request/view')
+    axios.get('http://localhost:7000/api/request/viewbyadmin')
     .then((res)=>{
       console.log(res.data)
       setGetRequest(res.data.length)

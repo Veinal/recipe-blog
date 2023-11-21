@@ -193,8 +193,11 @@ export default function ImgMediaCard() {
                     />
                     <CommentIcon/>
                   </div>
-                  <Link to={`/viewrecipe/${rec._id}`}><Button variant='contained'>View</Button></Link>
-                  {/* <Button size="small">Learn More</Button> */}
+                  {rec.status==='available' ?
+                    <Link to={`/viewrecipe/${rec._id}`}><Button variant='contained'>View</Button></Link>
+                    :
+                    <Button variant='contained' disabled>Disabled</Button>
+                  }
                 </CardActions>
               </Card>
             </>
