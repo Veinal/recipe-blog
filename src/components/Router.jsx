@@ -20,6 +20,7 @@ import EditCateglist from './EditCateglist'
 import Favorites from './Favorites'
 import MyRequests from './MyRequests'
 import { useState } from 'react'
+import Ratings from './Ratings'
 export default function Router() {
   const [dep,setDep]=useState(false)
   // Create a higher-order component (HOC) for routes that need the Navbar
@@ -50,6 +51,7 @@ export default function Router() {
                 <Route exact path='/editcateglist/:id' element={<EditCateglist/>}/>
                 <Route exact path='/favorites' element={<WithNavbar><Favorites/></WithNavbar>}/>
                 <Route exact path='/myrequests' element={<WithNavbar><MyRequests/></WithNavbar>}/>
+                <Route exact path='/ratings/:id' element={<WithNavbar><Ratings/></WithNavbar>}/>
 
                 <Route exact path='/recipes' element={<WithNavbar><Recipes/></WithNavbar>} />
                 <Route exact path='/aboutus' element={<WithNavbar><Aboutus/></WithNavbar>} />

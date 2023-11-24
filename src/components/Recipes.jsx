@@ -80,6 +80,22 @@ export default function ImgMediaCard() {
     );
   });  
 
+  const [getRates,setGetRates]=useState([])
+
+  //to view all the ratings of recipes 
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/ratings/viewall')
+    .then((res)=>{
+      console.log(res.data)
+      const ratingsForRecipes = filteredRecipes.map(recipe =>
+        res.data.filter(item => item.recipe_id?._id === recipe._id)
+      );
+      setGetRates(ratingsForRecipes);
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[filteredRecipes])
+
   const handleReqSubmit=(e)=>{
     e.preventDefault();
 
@@ -165,7 +181,9 @@ export default function ImgMediaCard() {
       <br />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
-        {filteredRecipes?.map((rec)=>{
+        {filteredRecipes?.map((rec,index)=>{
+          // const ratingsForRecipe = getRates.filter((rate) => rate.recipe_id?._id === rec._id);
+          const ratingsForRecipe = getRates[index] || [];
           return(
             <>
               <Card className='animate__animated animate__flipInY' sx={{ maxWidth: 345 }}>
@@ -186,12 +204,11 @@ export default function ImgMediaCard() {
                   <div style={{display:'flex',justifyContent:'space-between',gap:'5%'}}> 
                     <Rating
                       name="simple-controlled"
-                      // value={value}
-                      // onChange={(event, newValue) => {
-                      //   setValue(newValue);
-                      // }}
+                      value={ratingsForRecipe.reduce((acc, rate) => acc + rate.ratings, 0) / ratingsForRecipe.length}
+                      precision={0.5}
+                      readOnly
                     />
-                    <CommentIcon/>
+                    <CommentIcon /> {ratingsForRecipe.filter(rate => rate.reviews).length}
                   </div>
                   {rec.status==='available' ?
                     <Link to={`/viewrecipe/${rec._id}`}><Button variant='contained'>View</Button></Link>
