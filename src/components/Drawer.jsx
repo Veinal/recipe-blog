@@ -19,6 +19,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../logo.png'
 
@@ -106,6 +107,12 @@ export default function ClippedDrawer() {
                 <Button variant="text" color="inherit" sx={{ color: 'white' }} disableElevation>
                   <EditNoteIcon style={{ color: 'grey', marginRight: 15 }} fontSize="large" />
                   Request list
+                </Button>
+              </Link>
+              <Link to="/ratingslist">
+                <Button variant="text" color="inherit" sx={{ color: 'white' }} disableElevation>
+                  <RateReviewIcon style={{ color: 'grey', marginRight: 15 }} fontSize="large" />
+                  Ratings list
                 </Button>
               </Link>
             </div>

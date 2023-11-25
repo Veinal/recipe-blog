@@ -50,6 +50,7 @@ export default function ActionAreaCard() {
   const [recipeState,setRecipeState]=useState([])
   const [otherRecipes,setOtherRecipes]=useState([])
   const [user,setUser]=useState("")
+  const [count,setCount]=useState(0)
   const navigate=useNavigate()
 
   useEffect(()=>{
@@ -103,7 +104,7 @@ export default function ActionAreaCard() {
 
   const [getRates,setGetRates]=useState([])
 
-  //to view all the ratings of recipes 
+  //to view all the ratings of recipes for star and comment numbers
   useEffect(()=>{
     axios.get('http://localhost:7000/api/ratings/viewall')
     .then((res)=>{
@@ -114,7 +115,7 @@ export default function ActionAreaCard() {
     }).catch((err)=>{
       alert(err)
     })
-  },[])
+  },[count])
   // console.log(getRates,'getRates')
 
   const [getUserRatings,setGetUserRatings]=useState([])
@@ -166,6 +167,21 @@ export default function ActionAreaCard() {
         }
       });
   };
+
+  const HandleDelete=(id)=>{
+    axios.delete(`http://localhost:7000/api/ratings/delete/${id}`)
+    .then((res)=>{
+      console.log(res.data)
+      const updatedUserRatings = getUserRatings.filter((rating) => rating._id !== id);
+      setGetUserRatings(updatedUserRatings)
+      setCount((prev)=>!prev)
+      alert('Rating deleted successfully')
+    })
+    .catch((err)=>{
+      console.log(err)
+      alert("error deleting rating")
+    })
+  }
   
 
   return (
@@ -291,7 +307,7 @@ export default function ActionAreaCard() {
               <div>
                 <div style={{display:'flex',justifyContent:'space-between'}}>
                   <h4>Recipe: {item.recipe_id?.recipeName}</h4>
-                  <Button color='error'><DeleteIcon/></Button>
+                  <Button onClick={()=>HandleDelete(item._id)} color='error'><DeleteIcon/></Button>
                 </div>
                 <div style={ratingStyles}>
                   <StarIcon sx={starIconStyles} />

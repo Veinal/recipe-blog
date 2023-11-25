@@ -90,14 +90,9 @@ export default function Home() {
       {/* <Navbar/> */}
 
       <Link to='/admindashboard'><Button variant='contained'>admin dashboard</Button></Link>      
-      <Link to='/drawer'><Button variant='contained'>drawer</Button></Link>      
-      <Link to='/categorylist'><Button variant='contained'>Category</Button></Link>      
       <Link to='/signup'><Button variant='contained'>signup</Button></Link>      
       <Link to='/login'><Button variant='contained'>login</Button></Link>      
       <Link to='/adminlogin'><Button variant='contained'>admin login</Button></Link>      
-      <Link to='/viewrecipe'><Button variant='contained'>view recipe</Button></Link>      
-      <Link to='/editrecipelist'><Button variant='contained'>edit recipe</Button></Link>      
-      <Link to='/editcateglist'><Button variant='contained'>edit cat</Button></Link>      
 
       <div id="carouselExampleIndicators" className="carousel slide" data-mdb-ride="carousel" >
         <div className="carousel-indicators">
@@ -210,34 +205,6 @@ export default function Home() {
             <button onClick={()=>{alert('Login required!!!')}} class="shadow__btn" >More Recipes</button>     
           )}
         </div>
-       
-
-        {/* <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
-        {getRecipes?.map((rec)=>{
-          return(
-            <>
-              <Card sx={{ maxWidth: 345 }}>
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height="140"
-                  image={rec.image}
-                />
-                <CardContent>
-                  <Typography style={{display:'flex',flexDirection:'column'}}>
-                    <h6><b>Recipe name: </b>{rec.recipeName} </h6>
-                    <h6><b>Description: </b>{rec.description}</h6>
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Share</Button>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-            </>
-          )
-        })}
-      </div> */}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
         {displayedRecipes.map((rec) => (
@@ -259,7 +226,8 @@ export default function Home() {
               <CardActions style={{display:'flex',justifyContent:'space-between'}}>
               <Rating
                 name="simple-controlled"
-                // value={value}
+                value="3"
+                readOnly
                 // onChange={(event, newValue) => {
                 //   setValue(newValue);
                 // }}

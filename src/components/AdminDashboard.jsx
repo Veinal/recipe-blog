@@ -18,6 +18,7 @@ export default function ClippedDrawer() {
   const [getCategories,setGetCategories]=useState([])
   const [getRecipes,setGetRecipes]=useState([])
   const [getRequest,setGetRequest]=useState([])
+  const [getRatings,setGetRatings]=useState([])
 
   useEffect(()=>{
     axios.get('http://localhost:7000/api/registration/view')
@@ -59,6 +60,16 @@ export default function ClippedDrawer() {
     })
   },[])
 
+  useEffect(()=>{
+    axios.get('http://localhost:7000/api/ratings/viewall')
+    .then((res)=>{
+      console.log(res.data)
+      setGetRatings(res.data.length)
+    }).catch((err)=>{
+      alert(err)
+    })
+  },[])
+
   return (
     <Box sx={{ display: 'flex' }}>
 
@@ -72,10 +83,10 @@ export default function ClippedDrawer() {
         </Typography>
 
         {/* Grid container for the four cards */}
-        <Grid container spacing={3}>
+        <Grid container spacing={23}>
           {/* First Card */}
-          <Grid item xs={3}>
-            <Card sx={{ minWidth: 200, backgroundColor: '#FFD700' }}>
+          <Grid item xs={2}>
+            <Card sx={{ minWidth: 175, backgroundColor: '#FFD700' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
                    Users
@@ -88,8 +99,8 @@ export default function ClippedDrawer() {
           </Grid>
 
           {/* Second Card */}
-          <Grid item xs={3}>
-            <Card sx={{ minWidth: 200, backgroundColor: '#FF6347' }}>
+          <Grid item xs={2}>
+            <Card sx={{ minWidth: 175, backgroundColor: '#FF6347' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   Categories
@@ -102,8 +113,8 @@ export default function ClippedDrawer() {
           </Grid>
 
           {/* Third Card */}
-          <Grid item xs={3}>
-            <Card sx={{ minWidth: 200, backgroundColor: '#40E0D0' }}>
+          <Grid item xs={2}>
+            <Card sx={{ minWidth: 175, backgroundColor: '#40E0D0' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   Recipes
@@ -116,14 +127,28 @@ export default function ClippedDrawer() {
           </Grid>
 
           {/* Fourth Card */}
-          <Grid item xs={3}>
-            <Card sx={{ minWidth: 200, backgroundColor: '#98FB98' }}>
+          <Grid item xs={2}>
+            <Card sx={{ minWidth: 175, backgroundColor: '#98FB98' }}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   Requests
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Total requests: {getRequest}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* fifth card */}
+          <Grid item xs={2}>
+            <Card sx={{ minWidth: 175, backgroundColor: '#FFA07A' }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Ratings
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Total ratings: {getRatings}
                 </Typography>
               </CardContent>
             </Card>
