@@ -337,7 +337,7 @@ export default function ActionAreaCard() {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {recipe.recipeName}
+                    <Link style={{color:'black'}}>{recipe.recipeName}</Link>
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {recipe.description}

@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 // import Typography from '@mui/material/Typography';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { Link } from 'react-router-dom'
 
 
 export default function Favorites() {
@@ -67,8 +68,9 @@ export default function Favorites() {
                         {/* <h6><b>Category: </b>{item.recipe_id?.category_id}</h6> */}
                     </Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions style={{display:'flex',justifyContent:'space-between'}}>
                         <Button onClick={()=>HandleDelete(item)} variant='contained' color='error'><HighlightOffIcon/>Remove from favorites</Button>
+                        <Link to={`/viewrecipe/${item.recipe_id?._id}`}><Button variant='contained' >View</Button></Link>
                     </CardActions>
                     </Card>
                 </>
