@@ -72,7 +72,7 @@ export default function ActionAreaCard() {
     }).catch((err)=>{
       alert(err)
     })
-  },[])
+  },[recipeID])
 // console.log(recipeState,100)
 
   useEffect(() => {
@@ -337,7 +337,7 @@ export default function ActionAreaCard() {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    <Link style={{color:'black'}}>{recipe.recipeName}</Link>
+                    <Link to={`/viewrecipe/${recipe._id}`} style={{color:'black'}}>{recipe.recipeName}</Link>
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {recipe.description}

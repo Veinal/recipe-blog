@@ -16,7 +16,11 @@ import axios from 'axios';
 import { useNavigate,Link } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import CommentIcon from '@mui/icons-material/Comment';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 export default function ImgMediaCard() {
@@ -94,7 +98,7 @@ export default function ImgMediaCard() {
     }).catch((err)=>{
       alert(err)
     })
-  },[filteredRecipes])
+  },[getRecipes])
 
   const handleReqSubmit=(e)=>{
     e.preventDefault();
@@ -117,64 +121,32 @@ export default function ImgMediaCard() {
       {/* filter button and search bar*/}
       
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div class="dropdown">
-          <button
-            class="btn btn-primary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-mdb-toggle="dropdown"
-            aria-expanded="false"
-            style={{marginRight:'5px'}}
-          >
-            <i class="fas fa-filter fa-2x"></i>
-          </button>
-          {/* <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {getCategories.map((categ)=>(
-              <li><a onClick={()=>HandleFilter(categ.name)} class="dropdown-item" href="#">{categ?.name}</a></li>
-            ))}
-          </ul> */}
-          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{ padding: '10px' }}>
-            <li>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="selectAll"
-                  onChange={() => HandleFilter('')}
-                  defaultChecked
-                />
-                <label className="form-check-label" htmlFor="selectAll" >
-                  Select All
-                </label>
-              </div>
-            </li>
-            {getCategories.map((categ) => (
-              <li key={categ._id}>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id={categ._id}
-                    onChange={() => HandleFilter(categ.name)}
-                  />
-                  <label className="form-check-label" htmlFor={categ._id}>
-                    {categ?.name}
-                  </label>
-                </div>
-              </li>
-            ))}
-          </ul>      
-           
+      <div>
+          <span style={{display:'flex'}}>
+            <h5 style={{color:'white',margin:'auto'}}>Category:</h5>
+            <FormControl sx={{ m: 1, minWidth: 80,backgroundColor:'white' }}>
+              {/* <InputLabel id="demo-simple-select-autowidth-label">Category:</InputLabel> */}
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                // value={age}
+                onChange={(e) => HandleFilter(e.target.value)}
+                autoWidth
+                // label="Age"
+                size='small'
+              >
+                <MenuItem value="">All</MenuItem>
+                {getCategories.map((categ)=>(
+                  <MenuItem value={categ.name}>{categ.name}</MenuItem>               
+                ))}
+              </Select>
+            </FormControl>
+          </span>
         </div>
 
-        <div class="input-group" style={{ maxWidth: '300px' }}>
-          <div class="form-outline" style={{ flex: 1 }}>
-            <input value={searchState} onChange={(e)=>HandleSearch(e)} type="search" id="form1" class="form-control" style={{ padding: '0.375rem',border:'1px solid black',backgroundColor:'white' }} />
-            <label class="form-label" for="form1">Search</label>
-          </div>
-          <button type="button" class="btn btn-primary">
-            <i class="fas fa-search"></i>
-          </button>
+        <div style={{display:'flex',gap:'1%',width:'30%'}}>
+          <TextField value={searchState} onChange={(e)=>HandleSearch(e)} id="filled-basic" label='Search' variant="outlined" size='small' style={{backgroundColor:'white',borderRadius:'3%',width:'140%'}}/>
+          <Button variant='filled' color='primary' style={{border:'1px solid white'}}><SearchIcon style={{color:'white'}}/></Button>
         </div>
       </div>
 
