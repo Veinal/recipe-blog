@@ -159,13 +159,13 @@ export default function EditAdmin() {
             </Button>
           </label> */}
 
-          <img src={editAdmin?.profilePic} style={{width:100}} alt="profielpic" />
+          {/* <img src={editAdmin?.profilePic} style={{width:100}} alt="profielpic" />
 
           <TextField
             type='file'
             fullWidth
             onChange={handleFileInputChange}
-          />
+          /> */}
 
           {/* Submit Button */}
           <Button

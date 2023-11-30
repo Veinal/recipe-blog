@@ -172,7 +172,7 @@ export default function ClippedDrawer() {
                   <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
                     {/* <Button variant='contained' color='primary'><EditIcon/></Button> */}
-                    <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
+                    {/* <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button> */}
                     <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
                   </StyledTableCell>
                 </StyledTableRow>

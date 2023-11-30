@@ -30,6 +30,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Pagination from '@mui/material/Pagination';
+import SearchIcon from '@mui/icons-material/Search';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 
 const drawerWidth = 200;
@@ -59,7 +62,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 600,
+  width: 750,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -140,7 +143,52 @@ export default function ClippedDrawer({dep}) {
       alert(err)
     })
   },[])
-console.log(getCategory,'ca')
+  console.log(getCategory,'ca')
+
+  // Add states for search and filter
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  // Function to handle search input change
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Function to handle category selection change
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  let filteredRecipes = getRecipes.filter((recipe) => {
+    return (
+      recipe.recipeName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedCategory === '' || recipe.category_id?._id === selectedCategory)
+    );
+  });
+
+  //pagination code
+
+  const [page, setPage] = useState(1); // State to manage current page
+  const [rowsPerPage, setRowsPerPage] = useState(10); // State to manage rows per page
+
+  // Function to handle page change
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Function to handle rows per page change
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(1); // Reset page to 1 when changing rows per page
+  };
+
+  // Calculate the starting and ending indices for pagination
+  const startIndex = (page - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+
+  // Display rows based on the current page and rows per page
+  const paginatedRows = filteredRecipes.slice(startIndex, endIndex);
+
 
   const [selected,setSelected]=useState('')
 
@@ -223,6 +271,36 @@ console.log(getCategory,'ca')
           <Button onClick={handleOpen} variant='contained' color='inherit' ><AddIcon/>ADD RECIPE</Button>
         </div>
 
+        <div style={{ display: 'flex', justifyContent: 'center',gap:'1%', marginBottom: '1%' }}>
+          <FormControl sx={{ minWidth: 105 }}>
+            <InputLabel id="category-filter" size='small'>Category</InputLabel>
+            <Select
+              labelId="category-filter"
+              id="category-filter-select"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              size='small'
+            >
+              <MenuItem value="">All Categories</MenuItem>
+              {getCategory.map((item) => (
+                <MenuItem key={item._id} value={item._id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <div >
+            <TextField
+              label="Search Recipe"
+              variant="outlined"
+              value={searchTerm}
+              onChange={handleSearch}
+              size='small'
+            />
+            <Button variant='contained' color='inherit' style={{border:'2px solid black'}}><SearchIcon/></Button>
+          </div>
+        </div>
+
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
@@ -239,7 +317,7 @@ console.log(getCategory,'ca')
               </TableRow>
             </TableHead>
             <TableBody>
-              {getRecipes?.map((row,index) => (
+              {paginatedRows?.map((row,index) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                   <StyledTableCell>{row.recipeName}</StyledTableCell>
@@ -261,6 +339,18 @@ console.log(getCategory,'ca')
             </TableBody>
           </Table>
         </TableContainer>
+        <br />
+
+        <div style={{display:'flex',justifyContent:'center'}}>
+          <Pagination
+            count={Math.ceil(getRecipes.length / rowsPerPage)} // Calculate total number of pages
+            page={page}
+            onChange={handlePageChange}
+            rowsPerPageOptions={[5, 10, 25]} // Customize rows per page options as needed
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleRowsPerPageChange}
+          />      
+        </div>
         
         <div>
           {/* enter recipe details */}
@@ -277,9 +367,6 @@ console.log(getCategory,'ca')
                   <h2 style={{marginLeft:'20%'}}><b>ENTER RECIPE DETAILS:</b></h2> 
                   <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1%'}}>
                     <label>Recipe name:</label><TextField onChange={(e)=>Input(e)} name='recipeName' id="outlined-basic" label="recipe name" variant="outlined" />
-                    <label>Image:</label><TextField onChange={(e)=>InputImage(e)} type='file' name='image' id="outlined-basic" label="image" variant="outlined" />
-                    <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline rows={4}/>
-                    {/* <label>Category:</label><TextField onChange={(e)=>Input(e)} name='category' id="outlined-basic" label="category" variant="outlined" /> */}
                     <label>Category:</label>
                     <Box sx={{ minWidth: 120 }}>
                       <FormControl fullWidth>
@@ -298,7 +385,9 @@ console.log(getCategory,'ca')
                           </Select>
                       </FormControl>
                     </Box>
-                    <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline rows={2}/>
+                    <label>Image:</label><TextField onChange={(e)=>InputImage(e)} type='file' name='image' id="outlined-basic" label="image" variant="outlined" />
+                    <label>Description:</label><TextField onChange={(e)=>Input(e)} name='description' id="outlined-basic" label="description" variant="outlined" multiline rows={3}/>
+                    <label>Ingredients:</label><TextField onChange={(e)=>Input(e)} name='ingredients' id="outlined-basic" label="ingredients" variant="outlined" multiline rows={4} />
                     <label>Instructions:</label><TextField onChange={(e)=>Input(e)} name='instructions' id="outlined-basic" label="instructions" variant="outlined" multiline rows={4}/>
                     <label>Video:</label><TextField onChange={(e)=>Input(e)} name='video' id="outlined-basic" label="video" variant="outlined" />
                   </div>
@@ -356,13 +445,27 @@ console.log(getCategory,'ca')
                   <img src={`http://localhost:7000/uploads/recipe/${selected?.image}`} alt="no image found" style={{width:'400px',height:'300px',objectFit:'cover',border:'2px solid black',padding:'1%'}} />
                 </span>
                 <hr />
-                <h4><label><b>recipe name:</b></label> {selected.recipeName}</h4>
-                <h4><label><b>description:</b></label> {selected.description}</h4>
-                <h4><label><b>category:</b></label> {selected.category_id?.name}</h4>
-                <h4><label><b>ingredients:</b></label> {selected.ingredients}</h4>
-                <h4><label><b>instructions:</b></label> {selected.instructions}</h4>
-                <h4><label><b>video:</b></label> {selected.video}</h4>
-                <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+                <h4><label style={{fontSize:'24px'}}><b style={{color:'black'}}>Recipe name:</b></label> <span style={{fontSize:'20px'}}>{selected.recipeName}</span></h4>
+                <h4><label style={{fontSize:'24px'}}><b style={{color:'black'}}>Description:</b></label> <span style={{fontSize:'20px'}}>{selected.description}</span></h4>
+                <h4><label style={{fontSize:'24px'}}><b style={{color:'black'}}>Category:</b></label> <span style={{fontSize:'20px'}}>{selected.category_id?.name}</span></h4>
+                <h4><label style={{fontSize:'24px'}}><b style={{color:'black'}}>Ingredients:</b></label> <span style={{fontSize:'20px'}}>{selected.ingredients}</span></h4>
+                <h4><label style={{fontSize:'24px'}}><b style={{color:'black'}}>Instructions:</b></label> <span style={{fontSize:'20px'}}>{selected.instructions}</span></h4>
+                <h4><label style={{fontSize:'24px'}}><b style={{color:'black'}}>Video:</b></label> <span style={{fontSize:'20px'}}>
+                  {/* {selected.video} */}
+                  {selected?.video && (
+                    <div style={{ marginTop: '1rem' }}>
+                      <a
+                        href={selected.video}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: 'none', color: 'blue' }}
+                      >
+                        {selected?.video}
+                      </a>
+                    </div>
+                  )}
+                </span></h4>
+                <div style={{display:'flex',justifyContent:'center'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></div>
               </Typography>
               </CardContent>
               

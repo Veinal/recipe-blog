@@ -15,6 +15,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Axios from 'axios';
+import loginimg from '../loginimg.jpg'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright(props) {
   return (
@@ -38,10 +41,17 @@ export default function SignInSide() {
   const [loginState,setLoginState]=useState()
   const navigate=useNavigate()
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const HandleChange=(e)=>{
     setLoginState({...loginState,[e.target.name]:e.target.value})
   }
   console.log(loginState);
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -58,7 +68,9 @@ export default function SignInSide() {
       }
       else{
         console.log(res.data.error);
-        alert('Invalid Email or Password!!!')
+        // alert('Invalid Email or Password!!!')
+        setSnackbarMessage('Invalid Email or Password!!!');
+          setSnackbarOpen(true);
       }
     })
     .catch((err)=>{
@@ -78,7 +90,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: `url(${loginimg})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -125,10 +137,10 @@ export default function SignInSide() {
                 autoComplete="current-password"
                 onChange={(e)=>HandleChange(e)}
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth
@@ -155,6 +167,16 @@ export default function SignInSide() {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

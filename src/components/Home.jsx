@@ -23,7 +23,6 @@ import Axios from 'axios';
 import Rating from '@mui/material/Rating';
 import CommentIcon from '@mui/icons-material/Comment';
 
-
 function shuffleArray(array) {
   let shuffledArray = array.slice();
   for (let i = shuffledArray.length - 1; i > 0; i--) {
@@ -83,7 +82,7 @@ export default function Home() {
       const shuffledRecipes = shuffleArray(getRecipes);
 
       // Display only the first three recipes
-      const displayedRecipes = shuffledRecipes.slice(0, 3);
+      const displayedRecipes = shuffledRecipes.slice(0, 4);
 
   return (
     <div>
@@ -224,15 +223,15 @@ export default function Home() {
                 </Typography>
               </CardContent>
               <CardActions style={{display:'flex',justifyContent:'space-between'}}>
-              <Rating
+              {/* <Rating
                 name="simple-controlled"
                 value="3"
                 readOnly
-                // onChange={(event, newValue) => {
-                //   setValue(newValue);
-                // }}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
               />
-                <CommentIcon/>
+                <CommentIcon/> */}
               </CardActions>
             </Card>
           </React.Fragment>

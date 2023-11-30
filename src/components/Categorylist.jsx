@@ -77,7 +77,7 @@ const style2 = {
 
 
 export default function ClippedDrawer() {
-  const [categories,setCategories]=useState()
+  const [categories,setCategories]=useState({status:'available'})
   const [getCategories,setGetCategories]=useState([])
   const [count,setCount]=useState(0)
 
@@ -133,19 +133,46 @@ export default function ClippedDrawer() {
     await handleCloseDel()
   }
 
-  const handleSubmit=(e)=>{
-    e.preventDefault()
+  // const handleSubmit=(e)=>{
+  //   e.preventDefault()
 
-    Axios.post('http://localhost:7000/api/categories/insert',categories)
-    .then((res)=>{
-      console.log(res.data);
-      setCount((prev)=>!prev)
-    }).catch((err)=>{
-      console.log(err);
-    })
+  //   Axios.post('http://localhost:7000/api/categories/insert',categories)
+  //   .then((res)=>{
+  //     console.log(res.data);
+  //     setCount((prev)=>!prev)
+  //   }).catch((err)=>{
+  //     console.log(err);
+  //   })
 
-    handleClose()
-  }
+  //   handleClose()
+  // }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    // Check if the category already exists in the fetched categories
+    const categoryExists = getCategories.find(
+      (category) => category.name.toLowerCase() === categories.name.toLowerCase()
+    );
+  
+    if (categoryExists) {
+      // Display an error message or handle the duplication case
+      alert('Category already exists!');
+    } else {
+      // If the category doesn't exist, proceed with adding it
+      Axios.post('http://localhost:7000/api/categories/insert', categories)
+        .then((res) => {
+          console.log(res.data);
+          setCount((prev) => !prev);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+  
+      handleClose();
+    }
+  };
+  
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -183,7 +210,7 @@ export default function ClippedDrawer() {
                   <StyledTableCell>
                     <div style={{display:'flex',gap:'1%'}}>
                     <Link to={`/editcateglist/${row?._id}`}><Button variant='contained' color='primary'><EditIcon/></Button></Link>
-                    <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>
+                    {/* <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button> */}
                     <Button variant='contained' color='error' onClick={()=>handleOpenDel(row)}><DeleteIcon/></Button>
                     </div>
                   </StyledTableCell>
@@ -215,17 +242,8 @@ export default function ClippedDrawer() {
               />
   
               {/* Status */}
-              status
-              {/* <TextField
-                name='name'
-                disabled
-                fullWidth
-                // label="Category Name"
-                value="available"
-                variant="outlined"
-                margin="normal"
-                onChange={(e)=>HandleChange(e)}
-              /> */}
+              {/* status
+              
               <Select
                 fullWidth
                 name='status'
@@ -236,7 +254,7 @@ export default function ClippedDrawer() {
               >
                 <MenuItem value="available" >available</MenuItem>
                 <MenuItem value="not available">not available</MenuItem>
-              </Select>
+              </Select> */}
             </div>
 
             {/* Submit Button */}

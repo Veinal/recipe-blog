@@ -21,7 +21,23 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import SearchIcon from '@mui/icons-material/Search';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import Modal from '@mui/material/Modal';
+import Footer from './Footer';
 
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+};
 
 export default function ImgMediaCard() {
 
@@ -100,6 +116,10 @@ export default function ImgMediaCard() {
     })
   },[getRecipes])
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleReqSubmit=(e)=>{
     e.preventDefault();
 
@@ -123,7 +143,7 @@ export default function ImgMediaCard() {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div>
           <span style={{display:'flex'}}>
-            <h5 style={{color:'white',margin:'auto'}}>Category:</h5>
+            <h5 style={{color:'white',margin:'auto'}}><FilterAltIcon fontSize='large' style={{ width:'35px',height:'35px',border:'1px solid white',borderRadius:'5%'}}/></h5>
             <FormControl sx={{ m: 1, minWidth: 80,backgroundColor:'white' }}>
               {/* <InputLabel id="demo-simple-select-autowidth-label">Category:</InputLabel> */}
               <Select
@@ -150,10 +170,14 @@ export default function ImgMediaCard() {
         </div>
       </div>
 
-      <br />
+      <div style={{display:'flex',justifyContent:'end',marginRight:'1%'}}>
+        <Button onClick={handleOpen} variant='contained' color='inherit'><PostAddIcon/>Request recipe</Button>
+      </div>
+      {/* <br /> */}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
-        {filteredRecipes?.map((rec,index)=>{
+      {filteredRecipes.length > 0 ? (
+        filteredRecipes?.map((rec,index)=>{
           // const ratingsForRecipe = getRates.filter((rate) => rate.recipe_id?._id === rec._id);
           const ratingsForRecipe = getRates[index] || [];
           return(
@@ -191,41 +215,53 @@ export default function ImgMediaCard() {
               </Card>
             </>
           )
-        })}
-      </div>
-
-      <hr />
-
-      <div >
-
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '50px' }}>
-      <Card variant='outlined' sx={{ minWidth: 275, border: '2px solid black', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)' }}>
-        <h3 style={{ textAlign: 'center', marginBottom: '0', color: '#4CAF50' }}><b>REQUEST FOR RECIPE</b></h3>
-        <CardContent>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: '5%' }}>
-            <Typography>
-              Request: <TextField name='request' onChange={(e)=>handleChange(e)} size='small' label='Recipe Name' variant='outlined' />
-            </Typography>
-            <Typography>
-              Remarks: <TextField name='remarks' onChange={(e)=>handleChange(e)} size='small' label='Remarks' variant='outlined' />
-            </Typography>
+        })
+        ) : (
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'25vh',textAlign:'center'}}>
+            <h3 style={{color:'white'}}>No results found...</h3>
           </div>
-        </CardContent>
-        <CardActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-          <Link to='/myrequests'>
-            <Button variant='contained' color='primary' style={{ color: 'white' }}>
-              My Requests
-            </Button>
-          </Link>
-          <Button onClick={handleReqSubmit} variant='contained' style={{ backgroundColor: '#4CAF50', color: 'white' }}>
-            Submit
-          </Button>
-        </CardActions>
-      </Card>
-    </div>
-        
+        )}
       </div>
 
+      {/* <hr /> */}
+    <div>
+      <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Card variant='outlined' sx={{ minWidth: 400 }}>
+              <h3 style={{ textAlign: 'center', marginBottom: '0', color: '#4CAF50' }}><b>REQUEST FOR RECIPE</b></h3>
+              <CardContent>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 15, marginTop: '5%' }}>
+                  <Typography>
+                    Request: <TextField name='request' onChange={(e)=>handleChange(e)} size='small' label='Recipe Name' variant='outlined' />
+                  </Typography>
+                  <Typography>
+                    Remarks: <TextField name='remarks' onChange={(e)=>handleChange(e)} size='small' variant='outlined' multiline rows={3} fullWidth/>
+                  </Typography>
+                </div>
+              </CardContent>
+              <CardActions style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                <Link to='/myrequests'>
+                  <Button variant='contained' color='primary' style={{ color: 'white' }}>
+                    My Requests
+                  </Button>
+                </Link>
+                <Button onClick={handleReqSubmit} variant='contained' style={{ backgroundColor: '#4CAF50', color: 'white' }}>
+                  Submit
+                </Button>
+              </CardActions>
+            </Card>
+          </div>
+          </Box>
+        </Modal>
+    </div>
+    <br />
+    <Footer/>
     </div>
   );
 }

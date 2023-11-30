@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Axios from 'axios';
+import signimg from '../signimg.jpg'
 
 function Copyright(props) {
   return (
@@ -70,117 +71,127 @@ export default function SignUp() {
   };
 
   return (
-    <div>
-        <ThemeProvider theme={defaultTheme}>
-          <Container  component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-              sx={{
-                marginTop: 3,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign up
-              </Typography>
-              <Box component="form" noValidate  sx={{ mt: 3 }}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} >
-                    <TextField
-                      autoComplete="given-name"
-                      name="userName"
-                      required
-                      fullWidth
-                      id="userName"
-                      label="User Name"
-                      autoFocus
-                      onChange={(e)=>HandleChange(e)}
-                    />
-                  </Grid>
-                  {/* <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      name="lastName"
-                      autoComplete="family-name"
-                    />
-                  </Grid> */}
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                      onChange={(e)=>HandleChange(e)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="new-password"
-                      onChange={(e)=>HandleChange(e)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="phone"
-                      label="Phone number"
-                      id="phone"
-                      autoComplete="phone"
-                      onChange={(e)=>HandleChange(e)}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      name="picture"
-                      label="picture"
-                      id="picture"
-                      type='file'
-                      autoComplete="picture"
-                      onChange={(e)=>HandleImage(e)}
-                    />
-                  </Grid>
-                  
+    <div style={{
+      backgroundImage: `url(${signimg})`, // Replace 'path_to_your_image' with your image URL
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          minHeight: '100vh', // Set minimum height to cover the entire viewport
+    }}>
+      <ThemeProvider theme={defaultTheme}>
+        <Container  component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              // marginTop: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            border: '1px solid black', // Adjust border style and color here
+            borderRadius: '8px', // Add border radius for smoother edges
+            padding: 3,
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Add box shadow for depth
+            backgroundColor:'white'
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Box component="form" noValidate  sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} >
+                  <TextField
+                    autoComplete="given-name"
+                    name="userName"
+                    required
+                    fullWidth
+                    id="userName"
+                    label="User Name"
+                    autoFocus
+                    onChange={(e)=>HandleChange(e)}
+                  />
                 </Grid>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={handleSubmit}
-                >
-                  Sign Up
-                </Button>
-                <Grid container justifyContent="flex-end">
-                  <Grid item>
-                    <Link to='/login' variant="body2">
-                      Already have an account? Sign in
-                    </Link>
-                  </Grid>
+                {/* <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="family-name"
+                  />
+                </Grid> */}
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    onChange={(e)=>HandleChange(e)}
+                  />
                 </Grid>
-              </Box>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    onChange={(e)=>HandleChange(e)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="phone"
+                    label="Phone number"
+                    id="phone"
+                    autoComplete="phone"
+                    onChange={(e)=>HandleChange(e)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="picture"
+                    label="picture"
+                    id="picture"
+                    type='file'
+                    autoComplete="picture"
+                    onChange={(e)=>HandleImage(e)}
+                  />
+                </Grid>
+                
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleSubmit}
+              >
+                Sign Up
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link to='/login' variant="body2">
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
+              </Grid>
             </Box>
-            <Copyright sx={{ mt: 5 }} />
-          </Container>
-        </ThemeProvider>
+          </Box>
+          <Copyright sx={{ mt: 5 }} />
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }

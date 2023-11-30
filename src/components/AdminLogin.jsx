@@ -15,6 +15,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import loginimg from '../loginimg.jpg'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function Copyright(props) {
   return (
@@ -38,10 +41,17 @@ export default function SignInSide() {
   const [adminState,setAdminState]=useState()
   const navigate=useNavigate()
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const handleChange=(e)=>{
     setAdminState({...adminState,[e.target.name]:e.target.value})
   }
   console.log(adminState,'ads');
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -58,7 +68,9 @@ export default function SignInSide() {
       }
       else{
         console.log(res.data.error);
-        alert('Invalid Email or Password!!!')
+        // alert('Invalid Email or Password!!!')
+        setSnackbarMessage('Invalid Email or Password!!!');
+          setSnackbarOpen(true);
       }
     })
     // await navigate('/admindashboard')
@@ -74,7 +86,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: `url(${loginimg})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -151,6 +163,16 @@ export default function SignInSide() {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

@@ -59,17 +59,62 @@ const style2 = {
   // p: 2,
 };
 
+// const style3 = {
+//   position: 'absolute',
+//   top: '50%',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   width: '45%',
+//   bgcolor: 'background.paper',
+//   border: '2px solid #000',
+//   boxShadow: 24,
+//   // p: 2,
+// };
+
 const style3 = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '45%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  // p: 2,
+  bgcolor: 'white', // Change background color
+  borderRadius: '8px', // Add border radius for rounded corners
+  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // Add a subtle box shadow
+  // padding: '20px', // Add padding to the card
+
+  // Update the card styles
+  '& .cardContent': {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+
+  '& .userDetails': {
+    margin: '10px 0',
+    textAlign: 'center',
+    '& label': {
+      fontWeight: 'bold',
+    },
+  },
+
+  '& .userImage': {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '20px',
+    '& img': {
+      width: '150px',
+      borderRadius: '50%', // Make the image circular
+      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Add a slight shadow
+    },
+  },
+
+  '& .closeButton': {
+    marginTop: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
 };
+
 
 export default function ClippedDrawer() {
 
@@ -207,22 +252,34 @@ export default function ClippedDrawer() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style3}>
-            <Card>
-              <CardContent>
-              <Typography gutterBottom variant="h4" component="div">
-                <b><u>VIEW USER DETAILS:</u></b>
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <span style={{display:'flex',justifyContent:'center'}}><img src={`http://localhost:7000/uploads/users/${selected?.picture}`} alt="no image found" style={{width:100}} /></span>
-                <hr />
-                <h3><label><b><u>User name:</u></b></label>{selected.userName}</h3>
-                <h3><label><b><u>Email:</u></b></label>{selected.email}</h3>
-                <h3><label><b><u>Phone:</u></b></label>{selected.phone}</h3>
-                <span style={{display:'flex',justifyContent:'center'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></span>
-              </Typography>
-              </CardContent>
-              
-            </Card>
+              <Card className="cardContent">
+                <CardContent>
+                  <Typography gutterBottom variant="h4" component="div">
+                    <b><u>VIEW USER DETAILS:</u></b>
+                  </Typography>
+                  <div className="userImage">
+                    <img src={`http://localhost:7000/uploads/users/${selected?.picture}`} alt="no image found" />
+                  </div>
+                  <hr />
+                  <div className="userDetails">
+                    <h3>
+                      <label style={{ fontSize: '23px' }}><b><u>User name:</u></b></label>
+                      <span style={{ fontSize: '18px' }}> {selected.userName}</span>
+                    </h3>
+                    <h3>
+                      <label style={{ fontSize: '23px' }}><b><u>Email:</u></b></label>
+                      <span style={{ fontSize: '18px' }}> {selected.email}</span>
+                    </h3>
+                    <h3>
+                      <label style={{ fontSize: '23px' }}><b><u>Phone:</u></b></label>
+                      <span style={{ fontSize: '18px' }}> {selected.phone}</span>
+                    </h3>
+                  </div>
+                  <div className="closeButton">
+                    <Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button>
+                  </div>
+                </CardContent>
+              </Card>
             </Box>
           </Modal>
         </div>
