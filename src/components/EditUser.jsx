@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Typography, Box, IconButton, Avatar, Tooltip } from '@mui/material';
 import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function EditUser() {
   const [getUserDetails, setGetUserDetails] = useState({});
@@ -104,9 +105,11 @@ export default function EditUser() {
           />
         </Box>
         {/* Add more fields as needed */}
-        <Button variant="contained" color="primary" type="submit">
-          Save Changes
-        </Button>
+        <Link to='/'>
+          <Button variant="contained" color="primary" type="submit">
+            Save Changes
+          </Button>
+        </Link>
       </Box>
     </Container>
   );

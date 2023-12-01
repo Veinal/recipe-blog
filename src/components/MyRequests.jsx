@@ -62,7 +62,10 @@ export default function SimplePaper() {
         MY REQUESTS
       </Typography>
       <div style={{display:'flex',justifyContent:'center'}}>
-        <Box sx={{ width: '80%' }}>
+        {getRequest.length ==0 ? 
+          <span ><h4>No request yet!!</h4></span>
+          :
+        (<Box sx={{ width: '80%' }}>
           <Paper elevation={3} sx={{  }}>
             <TableContainer component={Paper}>
               <Table aria-label="customized table">
@@ -75,6 +78,7 @@ export default function SimplePaper() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  
                   {getRequest.map((row, index) => (
                     <StyledTableRow key={row.name}>
                       <StyledTableCell component="th" scope="row">
@@ -93,11 +97,13 @@ export default function SimplePaper() {
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
+                  
                 </TableBody>
               </Table>
             </TableContainer>
           </Paper>
-        </Box>
+        </Box>)
+        }
       </div>
     </Container>
   );

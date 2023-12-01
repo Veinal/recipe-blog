@@ -25,6 +25,8 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import Modal from '@mui/material/Modal';
 import Footer from './Footer';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 
 const style = {
@@ -116,6 +118,14 @@ export default function ImgMediaCard() {
     })
   },[getRecipes])
 
+  //snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -127,7 +137,10 @@ export default function ImgMediaCard() {
     .then((res)=>{
       console.log(res.data)
       // setRequestState(res.data)
-      window.location.reload();
+      // window.location.reload();
+      setSnackbarMessage('Request sent successfully');
+      setSnackbarOpen(true);
+      handleClose()
     }).catch((err)=>{
       console.log(err)
     })
@@ -175,9 +188,9 @@ export default function ImgMediaCard() {
       </div>
       {/* <br /> */}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
       {filteredRecipes.length > 0 ? (
-        filteredRecipes?.map((rec,index)=>{
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
+        {filteredRecipes?.map((rec,index)=>{
           // const ratingsForRecipe = getRates.filter((rate) => rate.recipe_id?._id === rec._id);
           const ratingsForRecipe = getRates[index] || [];
           return(
@@ -215,13 +228,13 @@ export default function ImgMediaCard() {
               </Card>
             </>
           )
-        })
+        })}
+      </div>
         ) : (
-          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'25vh',textAlign:'center'}}>
+          <div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'50vh',textAlign:'center'}}>
             <h3 style={{color:'white'}}>No results found...</h3>
           </div>
         )}
-      </div>
 
       {/* <hr /> */}
     <div>
@@ -262,6 +275,17 @@ export default function ImgMediaCard() {
     </div>
     <br />
     <Footer/>
+
+    <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }

@@ -82,10 +82,10 @@ export default function ActionAreaCard() {
     axios.get('http://localhost:7000/api/recipes/view')
       .then((res) => {
         // Get the category ID of the viewed recipe
-        const categoryID = recipeState?.category_id?.id;
+        const categoryID = recipeState?.category_id?._id;
 
         // Filter other recipes based on the category ID of the viewed recipe
-        const filteredRecipes = res.data.filter(recipe => recipe.category_id?.id === categoryID && recipe._id !== recipeID);
+        const filteredRecipes = res.data.filter(recipe => recipe.category_id?._id === categoryID && recipe._id !== recipeID);
 
         // Set otherRecipes to the filtered list based on the category ID
         setOtherRecipes(filteredRecipes);
@@ -121,7 +121,7 @@ export default function ActionAreaCard() {
     }).catch((err)=>{
       alert(err)
     })
-  },[count])
+  },[count,recipeID])
   // console.log(getRates,'getRates')
 
   const [getUserRatings,setGetUserRatings]=useState([])
@@ -139,6 +139,7 @@ export default function ActionAreaCard() {
     })
   },[])
 
+  //to check whether the favorites exist or not for the buttons
   const [getFav,setGetFav]=useState([])
 
   useEffect(()=>{
@@ -260,8 +261,6 @@ export default function ActionAreaCard() {
                     {/* <CommentIcon />{getRates.length} */}
                     </Button>
                   </Link>
-                  {/* <Link to={'/ratings'}><Button style={{marginBottom:'1%',color:'black'}} variant='text' color='inherit'><CommentIcon /></Button></Link> */}
-                  {/* <Button onClick={HandleRating} variant='contained'><StarIcon/>Rate</Button> */}
                   <br />
                   <h5>Description:</h5>
                   {recipeState?.description}
@@ -367,28 +366,33 @@ export default function ActionAreaCard() {
   
         <Grid item xs={12} md={4}>
           <div style={{ marginLeft: '5%' }}>
-            <h3><b>Other Recipes:</b></h3>
+            <h3><b>Related Recipes:</b></h3>
           </div>
           {/* Display only 3 random recipes */}
           {otherRecipes.map((recipe, index) => (
-            <Card key={index} sx={{ maxWidth: 345,marginBottom:'1%' }}>
-              {/* <CardActionArea> */}
-                <CardMedia
-                  component="img"
-                  height="250"
-                  image={`http://localhost:7000/uploads/recipe/${recipe.image}`}
-                  alt={`Recipe ${index}`}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    <Link to={`/viewrecipe/${recipe._id}`} style={{color:'black'}}>{recipe.recipeName}</Link>
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {recipe.description}
-                  </Typography>
-                </CardContent>
-              {/* </CardActionArea> */}
-            </Card>
+            <Card key={index} sx={{ maxWidth: 345, marginBottom: '1%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+            <CardMedia
+              component="img"
+              height="250"
+              image={`http://localhost:7000/uploads/recipe/${recipe.image}`}
+              alt={`Recipe ${index}`}
+              style={{ objectFit: 'cover', borderTopLeftRadius: '8px', borderTopRightRadius: '8px' }}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                <Link to={`/viewrecipe/${recipe._id}`} style={{ color: 'black', textDecoration: 'none' }}>{recipe.recipeName}</Link>
+              </Typography>
+              <Typography variant="body3" color="text.primary">
+                <span style={{ fontWeight: 'bold' }}>Category:</span> {recipe?.category_id?.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {recipe.description}
+              </Typography>
+            </CardContent>
+            {/* <CardActions style={{ borderTop: '1px solid #eee', padding: '8px', marginTop: 'auto' }}>
+            </CardActions> */}
+          </Card>
+          
           ))}
         </Grid>
       </Grid>

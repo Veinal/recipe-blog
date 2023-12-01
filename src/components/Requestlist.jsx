@@ -24,7 +24,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Modal from '@mui/material/Modal';
-
+import {Tooltip} from '@mui/material'
 
 const drawerWidth = 200;
 
@@ -53,7 +53,7 @@ const style2 = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 450,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -170,17 +170,29 @@ export default function ClippedDrawer() {
                   <StyledTableCell>{row.date}</StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
                   {row.status === 'accepted' ? (
-                      <Chip label="Accepted" color="success" />
+                      <span style={{display:'flex',gap:'6%'}}>
+                        <Chip label="Accepted" color="success" />
+                        <Tooltip title="delete" placement="bottom">
+                          <Button variant='contained' color='error' size='small' onClick={()=>handleOpenDel(row)} style={{ width: 'fit-content', minWidth: 'unset' }}>
+                            <DeleteIcon/>
+                          </Button>
+                        </Tooltip>
+                      </span>
                     ) : row.status === 'rejected' ? (
-                      <Chip label="Rejected" color="error" />
+                      <span style={{display:'flex',gap:'10%'}}>
+                        <Chip label="Rejected" color="error" />
+                        <Tooltip title="delete" placement="bottom">
+                          <Button variant='contained' color='error' size='small' onClick={()=>handleOpenDel(row)} style={{ width: 'fit-content', minWidth: 'unset' }}>
+                            <DeleteIcon/>
+                          </Button>
+                        </Tooltip>
+                      </span>
                     ) : (
                       <>
                         <Button variant='contained' color='success' onClick={() => HandleStatusUpdate(row._id, 'accepted')}>accept</Button>
                         <Button variant='contained' color='error' onClick={() => HandleStatusUpdate(row._id, 'rejected')}>reject</Button>
                       </>
                     )}
-                    {/* <Button variant='contained' color='success' onClick={()=>HandleStatusUpdate(row._id,'accepted')}>accept</Button>
-                    <Button variant='contained' color='error' onClick={()=>HandleStatusUpdate(row._id,'rejected')}>reject</Button> */}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -190,7 +202,7 @@ export default function ClippedDrawer() {
         
         <div>
           {/* delete modal card */}
-          {/* <Modal
+          <Modal
             open={open3}
             onClose={handleCloseDel}
             aria-labelledby="modal-modal-title"
@@ -201,7 +213,7 @@ export default function ClippedDrawer() {
                 
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  do you want to delete {selected.recipeName} ?
+                  do you want to delete this request ?
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   
@@ -212,7 +224,7 @@ export default function ClippedDrawer() {
               
             </Card>
             </Box>
-          </Modal> */}
+          </Modal>
 
           {/* view modal card */}
           {/* <Modal

@@ -153,6 +153,7 @@ export default function SignUp() {
                     name="phone"
                     label="Phone number"
                     id="phone"
+                    type='number'
                     autoComplete="phone"
                     onChange={(e)=>HandleChange(e)}
                   />

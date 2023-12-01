@@ -62,8 +62,12 @@ export default function Favorites() {
   return (
     <div>
         <span style={{display:'flex',justifyContent:'center'}}><h1><b>YOUR FAVORITES:</b></h1></span>
+        {getFav.length ==0 ? 
+            <span style={{display:'flex',justifyContent:'center',marginTop:'5%'}}><h3>No recipes in Favorites!!!</h3></span>
+            :
+            (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', padding: '20px' }}>
-        {getFav.map((item)=>{
+            {getFav.map((item)=>{
             return(
                 <>
                     <Card className='animate__animated animate__flipInY' sx={{ minWidth: 345 }}>
@@ -87,8 +91,10 @@ export default function Favorites() {
                     </Card>
                 </>
             )
-        })}
+            })}
         </div>
+            )
+        }
 
       <Snackbar
         open={snackbarOpen}

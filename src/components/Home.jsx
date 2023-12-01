@@ -258,12 +258,12 @@ export default function Home() {
 
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={9000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <MuiAlert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
-          {snackbarMessage}
+          <h5>{snackbarMessage}</h5>
         </MuiAlert>
       </Snackbar>
     </div>

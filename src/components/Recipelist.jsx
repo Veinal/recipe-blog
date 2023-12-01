@@ -81,7 +81,7 @@ const style2 = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 2,
+  // p: 2,
 };
 
 const style3 = {
@@ -472,7 +472,7 @@ export default function ClippedDrawer({dep}) {
                     </div>
                   )}
                 </span></h4>
-                <div style={{display:'flex',justifyContent:'center'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></div>
+                <div style={{display:'flex',justifyContent:'center',marginTop:'2%'}}><Button onClick={handleCloseView} variant='contained' color='inherit'>Close</Button></div>
               </Typography>
               </CardContent>
               
