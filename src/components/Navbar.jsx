@@ -109,6 +109,13 @@ export default function Navbar() {
                         <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                             {/* Other dropdown items */}
                             <li>
+                                <Link to='/edituser'>
+                                    <a className="dropdown-item" href="#">
+                                        My Profile
+                                    </a>
+                                </Link>
+                            </li>
+                            <li>
                                 <a onClick={Logout} className="dropdown-item" href="#">
                                     Logout
                                 </a>

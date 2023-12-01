@@ -78,7 +78,7 @@ export default function SignUp() {
           minHeight: '100vh', // Set minimum height to cover the entire viewport
     }}>
       <ThemeProvider theme={defaultTheme}>
-        <Container  component="main" maxWidth="xs">
+        <Container  component="main" maxWidth="sm">
           <CssBaseline />
           <Box
             sx={{
@@ -88,7 +88,7 @@ export default function SignUp() {
             alignItems: 'center',
             border: '1px solid black', // Adjust border style and color here
             borderRadius: '8px', // Add border radius for smoother edges
-            padding: 3,
+            padding: 5,
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Add box shadow for depth
             backgroundColor:'white'
             }}
@@ -96,7 +96,7 @@ export default function SignUp() {
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h4">
               Sign up
             </Typography>
             <Box component="form" noValidate  sx={{ mt: 3 }}>

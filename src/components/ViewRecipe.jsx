@@ -18,6 +18,9 @@ import StarIcon from '@mui/icons-material/Star';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 const cardStyles = {
   width:'70%',
@@ -78,16 +81,19 @@ export default function ActionAreaCard() {
   useEffect(() => {
     axios.get('http://localhost:7000/api/recipes/view')
       .then((res) => {
-        // Shuffle the array of recipes
-        const shuffledRecipes = res.data.sort(() => 0.5 - Math.random());
-        // Get the first 3 recipes for display
-        const selectedRecipes = shuffledRecipes.slice(0, 4);
-        setOtherRecipes(selectedRecipes);
+        // Get the category ID of the viewed recipe
+        const categoryID = recipeState?.category_id?.id;
+
+        // Filter other recipes based on the category ID of the viewed recipe
+        const filteredRecipes = res.data.filter(recipe => recipe.category_id?.id === categoryID && recipe._id !== recipeID);
+
+        // Set otherRecipes to the filtered list based on the category ID
+        setOtherRecipes(filteredRecipes);
       })
       .catch((err) => {
         alert(err);
       });
-  }, []);
+  }, [recipeState, recipeID]);
 
   const [userRating,setUserRating]=useState(0)
   const [userReview,setUserReview]=useState('')
@@ -133,6 +139,29 @@ export default function ActionAreaCard() {
     })
   },[])
 
+  const [getFav,setGetFav]=useState([])
+
+  useEffect(()=>{
+    const user=JSON.parse(localStorage.getItem("UserToken"))
+    console.log(user,343)
+    axios.get('http://localhost:7000/api/favorites/view',{headers:{"UserToken":user}})
+    .then((res)=>{
+        console.log(res.data)
+        setGetFav(res.data)
+    })
+    .catch((err)=>{
+        alert(err)
+    })
+  },[])
+
+  //snackbar code
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   //recipeID is received as parameter from the button where recipeState._id is sent as parameter
   const RatingSubmit=()=>{
     const data={
@@ -152,11 +181,14 @@ export default function ActionAreaCard() {
   }
   
   //here the recipeID and recipeState._id are the same
+  //handlesubmit to add to favorites
   const HandleSubmit = () => {
     axios.post('http://localhost:7000/api/favorites/addfavorites', { recipeID: recipeState._id },{headers:{"UserToken":user}})
       .then((res) => {
         console.log(res.data);
-        alert('Added to Favorites');
+        // alert('Added to Favorites');
+        setSnackbarMessage('Added to Favorites successfully');
+        setSnackbarOpen(true);
       })
       .catch((err) => {
         if (err.response && err.response.status === 400) {
@@ -201,7 +233,19 @@ export default function ActionAreaCard() {
               <CardContent>
                 <Typography style={{display:'flex',justifyContent:'space-between'}} gutterBottom variant="h5" component="div">
                   <h2>{recipeState?.recipeName}</h2>
-                  <Button onClick={HandleSubmit} variant='contained' color='error'><FavoriteIcon/>Add to Favorites</Button>
+                  <Button onClick={HandleSubmit} variant='contained' color='error' disabled={getFav.some(fav => fav.recipe_id?._id === recipeState?._id)}>
+                    {/* <FavoriteIcon/>Add to Favorites */}
+                    {getFav.some(fav => fav.recipe_id?._id === recipeState?._id) ? 
+                      (<>
+                        <FavoriteIcon />
+                        Already Favorited
+                      </>) : 
+                      (<>
+                        <FavoriteBorderIcon />
+                        Add to Favorites
+                      </>)
+                    }
+                  </Button>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   <Rating
@@ -261,7 +305,7 @@ export default function ActionAreaCard() {
 
           <br />
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          <Card sx={{ minWidth: 350, borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+          <Card sx={{ minWidth: 350, borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }} elevation={4}>
             <CardContent>
               <Typography variant="h6" style={{ textAlign: 'center', marginBottom: '20px' }}>
                 RATINGS & REVIEWS
@@ -348,6 +392,19 @@ export default function ActionAreaCard() {
           ))}
         </Grid>
       </Grid>
+
+      <div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+      </div>
     </div>
   );
 }

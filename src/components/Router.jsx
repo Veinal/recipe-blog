@@ -22,6 +22,7 @@ import MyRequests from './MyRequests'
 import { useState } from 'react'
 import Ratings from './Ratings'
 import Ratingslist from './Ratingslist'
+import EditUser from './EditUser'
 
 export default function Router() {
   const [dep,setDep]=useState(false)
@@ -58,6 +59,7 @@ export default function Router() {
                 <Route exact path='/ratings/:id' element={<WithNavbar><Ratings/></WithNavbar>}/>
                 <Route exact path='/recipes' element={<WithNavbar><Recipes/></WithNavbar>} />
                 <Route exact path='/aboutus' element={<WithNavbar><Aboutus/></WithNavbar>} />
+                <Route exact path='/edituser' element={<WithNavbar><EditUser/></WithNavbar>} />
                 <Route exact path='/viewrecipe/:id' element={<WithNavbar><ViewRecipe/></WithNavbar>}/>
             </Routes>
         </BrowserRouter>

@@ -28,6 +28,8 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import { Link } from 'react-router-dom';
+import Chip from '@mui/material/Chip';
+
 
 const drawerWidth = 200;
 
@@ -206,7 +208,13 @@ export default function ClippedDrawer() {
                 <StyledTableRow key={row.name}>
                   <StyledTableCell component="th" scope="row">{index+1}</StyledTableCell>
                   <StyledTableCell>{row.name}</StyledTableCell>
-                  <StyledTableCell>{row.status}</StyledTableCell>
+                  <StyledTableCell>
+                    {row?.status==="available" ? 
+                      (<Chip label="available" color="success" />)
+                      :
+                      (<Chip label="not available" color="error" />)
+                    }
+                  </StyledTableCell>
                   <StyledTableCell>
                     <div style={{display:'flex',gap:'1%'}}>
                     <Link to={`/editcateglist/${row?._id}`}><Button variant='contained' color='primary'><EditIcon/></Button></Link>

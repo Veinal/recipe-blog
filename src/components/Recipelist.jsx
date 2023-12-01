@@ -33,6 +33,7 @@ import Select from '@mui/material/Select';
 import Pagination from '@mui/material/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import Chip from '@mui/material/Chip';
 
 
 const drawerWidth = 200;
@@ -328,7 +329,13 @@ export default function ClippedDrawer({dep}) {
                   <StyledTableCell>{row.category_id?.name}</StyledTableCell>
                   {/* <StyledTableCell>{row.description}</StyledTableCell> */}
                   {/* <StyledTableCell>{row.instructions}</StyledTableCell> */}
-                  <StyledTableCell>{row?.status}</StyledTableCell>
+                  <StyledTableCell>
+                    {row?.status==="available" ? 
+                      (<Chip label="available" color="success" />)
+                      :
+                      (<Chip label="not available" color="error" />)
+                    }
+                  </StyledTableCell>
                   <StyledTableCell style={{display:'flex',gap:'2%'}}>
                     <Link to={`/editrecipelist/${row?._id}`}><Button variant='contained' color='primary'><EditIcon/></Button></Link>
                     <Button variant='contained' color='success' onClick={()=>handleOpenView(row)}><VisibilityIcon/></Button>

@@ -13,6 +13,8 @@ import Button from '@mui/material/Button';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Link } from 'react-router-dom'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 
 export default function Favorites() {
@@ -34,12 +36,22 @@ export default function Favorites() {
     },[count])
     console.log(getFav,101)
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
+
     const HandleDelete=(i)=>{
         setSelectedFav(i)
         axios.delete(`http://localhost:7000/api/favorites/RemoveFavorites/${i._id}`)
         .then((res)=>{
             console.log(res.data)
-            alert('removed from favorites')
+            // alert('removed from favorites')
+            setSnackbarMessage('Removed from Favorites!!!');
+            setSnackbarOpen(true);
             setCount((prev)=>!prev)
         })
         .catch((err)=>{
@@ -77,6 +89,17 @@ export default function Favorites() {
             )
         })}
         </div>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   )
 }
