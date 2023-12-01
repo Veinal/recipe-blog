@@ -22,6 +22,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Axios from 'axios';
 import Rating from '@mui/material/Rating';
 import CommentIcon from '@mui/icons-material/Comment';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function shuffleArray(array) {
   let shuffledArray = array.slice();
@@ -83,6 +85,18 @@ export default function Home() {
 
       // Display only the first three recipes
       const displayedRecipes = shuffledRecipes.slice(0, 4);
+
+      const [snackbarOpen, setSnackbarOpen] = useState(false);
+      const [snackbarMessage, setSnackbarMessage] = useState('');
+
+      const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+      };
+
+      const Alert=()=>{
+        setSnackbarMessage('Login Required');
+        setSnackbarOpen(true);
+      }
 
   return (
     <div>
@@ -184,7 +198,7 @@ export default function Home() {
         >
           <h4 style={{marginTop:"8%",width:500}}>“It's very hard to be an innovator at the highest level in any discipline. For some chef's it's merely about combining ingredients, but that's something you can do with your eyes closed.”</h4>
           <Paper elevation={12} > 
-            <img src={Ferran} style={{width:"100%",height:"100%"}} alt="gordon ramsey" />
+            <img src={Ferran} style={{width:"100%",height:"100%"}} alt="ferran" />
           </Paper>
         </Box>
       </div> <br /><br />
@@ -201,7 +215,7 @@ export default function Home() {
           {loggedUser ? (
             <Link to='/recipes'><button class="shadow__btn">More Recipes</button></Link>
           ):(
-            <button onClick={()=>{alert('Login required!!!')}} class="shadow__btn" >More Recipes</button>     
+            <button onClick={Alert} class="shadow__btn" >More Recipes</button>     
           )}
         </div>
 
@@ -242,6 +256,16 @@ export default function Home() {
 
       <Footer/>
 
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="warning" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   )
 }
