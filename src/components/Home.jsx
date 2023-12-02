@@ -102,10 +102,10 @@ export default function Home() {
     <div>
       {/* <Navbar/> */}
 
-      <Link to='/admindashboard'><Button variant='contained'>admin dashboard</Button></Link>      
+      {/* <Link to='/admindashboard'><Button variant='contained'>admin dashboard</Button></Link>      
       <Link to='/signup'><Button variant='contained'>signup</Button></Link>      
       <Link to='/login'><Button variant='contained'>login</Button></Link>      
-      <Link to='/adminlogin'><Button variant='contained'>admin login</Button></Link>      
+      <Link to='/adminlogin'><Button variant='contained'>admin login</Button></Link>       */}
 
       <div id="carouselExampleIndicators" className="carousel slide" data-mdb-ride="carousel" >
         <div className="carousel-indicators">

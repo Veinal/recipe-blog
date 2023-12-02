@@ -54,6 +54,7 @@ export default function ActionAreaCard() {
   const [otherRecipes,setOtherRecipes]=useState([])
   const [user,setUser]=useState("")
   const [count,setCount]=useState(0)
+  const [count2,setCount2]=useState(0)
   const navigate=useNavigate()
 
   useEffect(()=>{
@@ -153,7 +154,7 @@ export default function ActionAreaCard() {
     .catch((err)=>{
         alert(err)
     })
-  },[])
+  },[count2])
 
   //snackbar code
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -190,6 +191,7 @@ export default function ActionAreaCard() {
         // alert('Added to Favorites');
         setSnackbarMessage('Added to Favorites successfully');
         setSnackbarOpen(true);
+        setCount2((prev)=>!prev)
       })
       .catch((err) => {
         if (err.response && err.response.status === 400) {

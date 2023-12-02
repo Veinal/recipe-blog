@@ -34,6 +34,8 @@ import Pagination from '@mui/material/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import Chip from '@mui/material/Chip';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 
 const drawerWidth = 200;
@@ -167,6 +169,14 @@ export default function ClippedDrawer({dep}) {
     );
   });
 
+  //snackbar code
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   //pagination code
 
   const [page, setPage] = useState(1); // State to manage current page
@@ -246,6 +256,8 @@ export default function ClippedDrawer({dep}) {
     .then((result)=>{
       console.log(result.data);
       setCount((prev)=>!prev);
+      setSnackbarMessage('Recipe Added successfully');
+      setSnackbarOpen(true);
     })
     .catch((err)=>{
       console.log(err);
@@ -482,6 +494,16 @@ export default function ClippedDrawer({dep}) {
         </div>
 
       </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
 }
